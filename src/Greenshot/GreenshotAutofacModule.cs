@@ -114,19 +114,7 @@ namespace Greenshot
                 .SingleInstance();
 
             builder
-                .RegisterType<PrintHelper>()
-                .AsSelf();
-
-            builder
-                .RegisterType<PrintOptionsDialog>()
-                .AsSelf();
-
-            builder
                 .RegisterType<LanguageDialog>()
-                .AsSelf();
-
-            builder
-                .RegisterType<AboutForm>()
                 .AsSelf();
 
             // Configuration

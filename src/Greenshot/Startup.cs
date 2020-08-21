@@ -222,16 +222,7 @@ namespace Greenshot
             };
             internalFlowLayoutPanel.Controls.Add(textbox);
             flowLayoutPanel.Controls.Add(internalFlowLayoutPanel);
-            var cancelButton = new Button
-            {
-                Text = language.TranslationOrDefault(l => l.BugreportCancel),
-                Dock = DockStyle.Bottom,
-                Height = 25
-            };
-            flowLayoutPanel.Controls.Add(cancelButton);
             multiInstanceForm.Controls.Add(flowLayoutPanel);
-
-            multiInstanceForm.CancelButton = cancelButton;
 
             multiInstanceForm.ShowDialog();
         }

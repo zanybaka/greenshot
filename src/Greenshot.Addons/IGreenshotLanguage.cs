@@ -30,18 +30,8 @@ namespace Greenshot.Addons
     {
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
         string None { get; }
-        string AboutBugs { get; }
-        string AboutDonations { get; }
-        string AboutHost { get; }
-        string AboutIcons { get; }
-        string AboutLicense { get; }
-        string AboutTitle { get; }
-        string AboutTranslation { get; }
         string ApplicationTitle { get; }
         [DefaultValue("Cancel")]
-        string BugreportCancel { get; }
-        string BugreportInfo { get; }
-        string BugreportTitle { get; }
         string ClipboardError { get; }
         string ClipboardInuse { get; }
 
@@ -90,20 +80,6 @@ namespace Greenshot.Addons
         string QualitydialogDontaskagain { get; }
         string QualitydialogTitle { get; }
         string SettingsReducecolors { get; }
-        string PrintError { get; }
-        string PrintoptionsAllowcenter { get; }
-        string PrintoptionsAllowenlarge { get; }
-        string PrintoptionsAllowrotate { get; }
-        string PrintoptionsAllowshrink { get; }
-        string PrintoptionsColors { get; }
-        string PrintoptionsDontaskagain { get; }
-        string PrintoptionsPagelayout { get; }
-        string PrintoptionsPrintcolor { get; }
-        string PrintoptionsPrintgrayscale { get; }
-        string PrintoptionsPrintmonochrome { get; }
-        string PrintoptionsTimestamp { get; }
-        string PrintoptionsInverted { get; }
-        string PrintoptionsTitle { get; }
         string QuicksettingsDestinationFile { get; }
         string SettingsAlwaysshowqualitydialog { get; }
         string SettingsAlwaysshowprintoptionsdialog { get; }
@@ -130,7 +106,6 @@ namespace Greenshot.Addons
         string SettingsLanguage { get; }
         string SettingsMessageFilenamepattern { get; }
         string SettingsOutput { get; }
-        string SettingsPlaysound { get; }
         string SettingsPlugins { get; }
         string SettingsPluginsName { get; }
         string SettingsPluginsVersion { get; }
@@ -138,8 +113,6 @@ namespace Greenshot.Addons
         string SettingsPluginsDllpath { get; }
         string SettingsPreferredfilesettings { get; }
         string SettingsPrimaryimageformat { get; }
-        string SettingsPrinter { get; }
-        string SettingsPrintoptions { get; }
         string SettingsRegisterhotkeys { get; }
         string SettingsShowflashlight { get; }
         string SettingsStoragelocation { get; }
@@ -151,7 +124,6 @@ namespace Greenshot.Addons
         string SettingsTooltipRegisterhotkeys { get; }
         string SettingsTooltipStoragelocation { get; }
         string SettingsVisualization { get; }
-        string SettingsShownotify { get; }
         string SettingsWaittime { get; }
 
         string SettingsZoom { get; }
@@ -161,7 +133,6 @@ namespace Greenshot.Addons
         [DefaultValue("Screen capture mode")]
         string SettingsScreenCaptureMode { get; }
         string SettingsNetwork { get; }
-        string SettingsCheckperiod { get; }
         string SettingsUsedefaultproxy { get; }
         string TooltipFirststart { get; }
         string Warning { get; }
@@ -175,9 +146,6 @@ namespace Greenshot.Addons
         string LatestVersion { get; }
         [DefaultValue("Current version")]
         string CurrentVersion { get; }
-
-        [DefaultValue("I know what I am doing! (expert mode)")]
-        string Expert { get; }
 
         [DefaultValue("Error while exporting to {0}. Please try again.")]
         string DestinationExportFailed { get; }

@@ -82,16 +82,6 @@ namespace Greenshot.Addons.Core
                 coreConfiguration.OutputFileAutoReduceColors = false;
             }
 
-            // Fix for excessive feed checking
-            if (coreConfiguration.UpdateCheckInterval != 0 && coreConfiguration.UpdateCheckInterval <= 7 && coreConfiguration.LastSaveWithVersion.StartsWith("1.2"))
-            {
-                coreConfiguration.UpdateCheckInterval = 14;
-            }
-            if (coreConfiguration.UpdateCheckInterval > 365)
-            {
-                coreConfiguration.UpdateCheckInterval = 365;
-            }
-
             // Enable OneNote if upgrading from 1.1
             if (coreConfiguration.ExcludeDestinations != null && coreConfiguration.ExcludeDestinations.Contains("OneNote"))
             {

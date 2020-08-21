@@ -29,8 +29,6 @@ using System.Windows.Forms;
 using Autofac.Features.OwnedInstances;
 using Caliburn.Micro;
 using Dapplo.Windows.Desktop;
-using Greenshot.Destinations;
-using Greenshot.Help;
 using Greenshot.Helpers;
 using Dapplo.Log;
 using Timer = System.Timers.Timer;
@@ -52,7 +50,6 @@ using Greenshot.Gfx;
 using Greenshot.Ui.Configuration.ViewModels;
 using Message = System.Windows.Forms.Message;
 using Screen = System.Windows.Forms.Screen;
-using Dapplo.Config.Ini;
 using Dapplo.Windows.User32;
 using Greenshot.Addons.Resources;
 using Greenshot.Components;
@@ -69,7 +66,6 @@ namespace Greenshot.Forms
         private readonly IWindowManager _windowManager;
         private readonly IGreenshotLanguage _greenshotLanguage;
         private readonly Func<Owned<ConfigViewModel>> _configViewModelFactory;
-        private readonly Func<Owned<AboutForm>> _aboutFormFactory;
         private readonly Func<IBitmapWithNativeSupport, Bitmap> _valueConverter = bitmap => bitmap?.NativeBitmap;
 
         // Timer for the double click test
@@ -87,7 +83,6 @@ namespace Greenshot.Forms
             IWindowManager windowManager,
             IGreenshotLanguage greenshotLanguage,
             Func<Owned<ConfigViewModel>> configViewModelFactory,
-            Func<Owned<AboutForm>> aboutFormFactory,
             DestinationHolder destinationHolder,
             CaptureSupportInfo captureSupportInfo
             ) : base(greenshotLanguage)
@@ -96,7 +91,6 @@ namespace Greenshot.Forms
             _windowManager = windowManager;
             _greenshotLanguage = greenshotLanguage;
             _configViewModelFactory = configViewModelFactory;
-            _aboutFormFactory = aboutFormFactory;
             _destinationHolder = destinationHolder;
             _captureSupportInfo = captureSupportInfo;
             Instance = this;
@@ -126,16 +120,6 @@ namespace Greenshot.Forms
             contextmenu_settings.Visible = !_coreConfiguration.DisableSettings;
 
             UpdateUi();
-
-            if (_coreConfiguration.DisableQuickSettings)
-            {
-                contextmenu_quicksettings.Visible = false;
-            }
-            else
-            {
-                // Do after all plugins & finding the destination, otherwise they are missing!
-                InitializeQuickSettingsMenu();
-            }
 
             // Set the Greenshot icon visibility depending on the configuration. (Added for feature #3521446)
             // Setting it to true this late prevents Problems with the context menu
@@ -208,7 +192,6 @@ namespace Greenshot.Forms
             
             // Show hotkeys in Contextmenu
             contextmenu_capturearea.ShortcutKeyDisplayString = HotkeyControl.GetLocalizedHotkeyStringFromString(_coreConfiguration.RegionHotkey);
-            contextmenu_capturelastregion.ShortcutKeyDisplayString = HotkeyControl.GetLocalizedHotkeyStringFromString(_coreConfiguration.LastregionHotkey);
             contextmenu_capturewindow.ShortcutKeyDisplayString = HotkeyControl.GetLocalizedHotkeyStringFromString(_coreConfiguration.WindowHotkey);
             contextmenu_capturefullscreen.ShortcutKeyDisplayString = HotkeyControl.GetLocalizedHotkeyStringFromString(_coreConfiguration.FullscreenHotkey);
         }
@@ -382,7 +365,6 @@ namespace Greenshot.Forms
                 var size = new Size(width, height);
                 contextMenu.SuspendLayout();
                 contextMenu.ImageScalingSize = size;
-                contextmenu_quicksettings.Size = new Size(170, width + 8);
                 contextMenu.ResumeLayout(true);
                 contextMenu.Refresh();
                 notifyIcon.Icon = GreenshotResources.Instance.GetGreenshotIcon();
@@ -392,13 +374,8 @@ namespace Greenshot.Forms
 
             contextMenuResourceScaleHandler.AddTarget(contextmenu_capturewindow, "contextmenu_capturewindow.Image", _valueConverter);
             contextMenuResourceScaleHandler.AddTarget(contextmenu_capturearea, "contextmenu_capturearea.Image", _valueConverter);
-            contextMenuResourceScaleHandler.AddTarget(contextmenu_capturelastregion, "contextmenu_capturelastregion.Image", _valueConverter);
             contextMenuResourceScaleHandler.AddTarget(contextmenu_capturefullscreen, "contextmenu_capturefullscreen.Image", _valueConverter);
-            contextMenuResourceScaleHandler.AddTarget(contextmenu_captureclipboard, "contextmenu_captureclipboard.Image", _valueConverter);
-            contextMenuResourceScaleHandler.AddTarget(contextmenu_openfile, "contextmenu_openfile.Image", _valueConverter);
             contextMenuResourceScaleHandler.AddTarget(contextmenu_settings, "contextmenu_settings.Image", _valueConverter);
-            contextMenuResourceScaleHandler.AddTarget(contextmenu_help, "contextmenu_help.Image", _valueConverter);
-            contextMenuResourceScaleHandler.AddTarget(contextmenu_donate, "contextmenu_donate.Image", _valueConverter);
             contextMenuResourceScaleHandler.AddTarget(contextmenu_exit, "contextmenu_exit.Image", _valueConverter);
 
             // this is special handling, for the icons which come from the executables
@@ -448,12 +425,6 @@ namespace Greenshot.Forms
         
         private void ContextMenuOpening(object sender, CancelEventArgs e)
         {
-            using (var clipboardAccessToken = ClipboardNative.Access())
-            {
-                contextmenu_captureclipboard.Enabled = clipboardAccessToken.HasImage();
-            }
-            contextmenu_capturelastregion.Enabled = _coreConfiguration.LastCapturedRegion != NativeRect.Empty;
-
             // Multi-Screen captures
             contextmenu_capturefullscreen.Click -= CaptureFullScreenToolStripMenuItemClick;
             contextmenu_capturefullscreen.DropDownOpening -= MultiScreenDropDownOpening;
@@ -466,14 +437,6 @@ namespace Greenshot.Forms
             else
             {
                 contextmenu_capturefullscreen.Click += CaptureFullScreenToolStripMenuItemClick;
-            }
-
-            var now = DateTime.Now;
-            if (now.Month == 12 && now.Day > 19 && now.Day < 27 || // christmas
-                now.Month == 3 && now.Day > 13 && now.Day < 21)
-            {
-                // birthday
-                contextmenu_donate.Image = GreenshotResources.Instance.GetBitmap("contextmenu_present.Image", GetType()).NativeBitmap;
             }
         }
 
@@ -703,34 +666,7 @@ namespace Greenshot.Forms
             if (!Equals(lang, _coreConfiguration.Language))
             {
                 ApplyLanguage();
-                InitializeQuickSettingsMenu();
             }
-        }
-
-        /// <summary>
-        ///     The "About Greenshot" entry is clicked
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void Contextmenu_aboutClick(object sender, EventArgs e)
-        {
-            ShowAbout();
-        }
-
-        public void ShowAbout()
-        {
-            using var aboutForm = _aboutFormFactory();
-            aboutForm.Value.ShowDialog(this);
-        }
-
-        /// <summary>
-        ///     The "Help" entry is clicked
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void Contextmenu_helpClick(object sender, EventArgs e)
-        {
-            HelpFileLoader.LoadHelp();
         }
 
         /// <summary>
@@ -742,213 +678,6 @@ namespace Greenshot.Forms
         {
             // Gracefull shutdown
             System.Windows.Application.Current.Shutdown(0);
-        }
-
-        private void CheckStateChangedHandler(object sender, EventArgs e)
-        {
-            if (sender is ToolStripMenuSelectListItem captureMouseItem)
-            {
-                _coreConfiguration.CaptureMousepointer = captureMouseItem.Checked;
-            }
-        }
-
-        /// <summary>
-        ///     This needs to be called to initialize the quick settings menu entries
-        /// </summary>
-        private void InitializeQuickSettingsMenu()
-        {
-            contextmenu_quicksettings.DropDownItems.Clear();
-
-            if (_coreConfiguration.DisableQuickSettings)
-            {
-                return;
-            }
-
-            // Only add if the value is not fixed
-            if (!_coreConfiguration.IsWriteProtected("CaptureMousepointer"))
-            {
-                // For the capture mousecursor option
-                var captureMouseItem = new ToolStripMenuSelectListItem
-                {
-                    Text = _greenshotLanguage.SettingsCaptureMousepointer,
-                    Checked = _coreConfiguration.CaptureMousepointer,
-                    CheckOnClick = true
-                };
-                captureMouseItem.CheckStateChanged += CheckStateChangedHandler;
-
-                contextmenu_quicksettings.DropDownItems.Add(captureMouseItem);
-            }
-            ToolStripMenuSelectList selectList;
-            if (!_coreConfiguration.IsWriteProtected("Destinations"))
-            {
-                // screenshot destination
-                selectList = new ToolStripMenuSelectList(_coreConfiguration, "destinations", true)
-                {
-                    Text = _greenshotLanguage.SettingsDestination
-                };
-                // Working with IDestination:
-                foreach (var destination in _destinationHolder.SortedActiveDestinations)
-                {
-                    selectList.AddItem(destination.Description, destination, _coreConfiguration.OutputDestinations.Contains(destination.Designation));
-                }
-                selectList.CheckedChanged += QuickSettingDestinationChanged;
-                contextmenu_quicksettings.DropDownItems.Add(selectList);
-            }
-
-            var languageKeys = _greenshotLanguage.Keys().ToList();
-            if (!_coreConfiguration.IsWriteProtected("WindowCaptureMode"))
-            {
-                // Capture Modes
-                selectList = new ToolStripMenuSelectList(_coreConfiguration,"capturemodes", false)
-                {
-                    Text = _greenshotLanguage.SettingsWindowCaptureMode
-                };
-                var enumTypeName = typeof(WindowCaptureModes).Name;
-                foreach (WindowCaptureModes captureMode in Enum.GetValues(typeof(WindowCaptureModes)))
-                {
-                    var key = enumTypeName + "." + captureMode;
-                    if (languageKeys.Contains(key))
-                    {
-                        selectList.AddItem(_greenshotLanguage[key], captureMode, _coreConfiguration.WindowCaptureMode == captureMode);
-                    }
-                    else
-                    {
-                        Log.Warn().WriteLine("Missing translation for {0}", key);
-                    }
-                }
-                selectList.CheckedChanged += QuickSettingCaptureModeChanged;
-                contextmenu_quicksettings.DropDownItems.Add(selectList);
-            }
-
-            // print options
-            selectList = new ToolStripMenuSelectList(_coreConfiguration, "printoptions", true)
-            {
-                Text = _greenshotLanguage.SettingsPrintoptions
-            };
-
-            foreach (var outputPrintIniValue in _coreConfiguration.GetIniValues().Values.Where(value => value.PropertyName.StartsWith("OutputPrint") && value.ValueType == typeof(bool) && !_coreConfiguration.IsWriteProtected(value.PropertyName)))
-            {
-                var key = outputPrintIniValue.PropertyName;
-                if (languageKeys.Contains(key))
-                {
-                    selectList.AddItem(_greenshotLanguage[key], outputPrintIniValue, (bool)outputPrintIniValue.Value);
-                }
-                else
-                {
-                    Log.Warn().WriteLine("Missing translation for {0}", key);
-                }
-            }
-            if (selectList.DropDownItems.Count > 0)
-            {
-                selectList.CheckedChanged += QuickSettingBoolItemChanged;
-                contextmenu_quicksettings.DropDownItems.Add(selectList);
-            }
-            else
-            {
-                selectList.Dispose();
-            }
-
-            // effects
-            selectList = new ToolStripMenuSelectList(_coreConfiguration, "effects", true)
-            {
-                Text = _greenshotLanguage.SettingsVisualization
-            };
-
-            var iniValue = _coreConfiguration.GetIniValue("PlayCameraSound");
-            var languageKey = _coreConfiguration.GetTagValue(iniValue.PropertyName, ConfigTags.LanguageKey) as string;
-
-            if (!_coreConfiguration.IsWriteProtected(iniValue.PropertyName))
-            {
-                if (languageKeys.Contains(languageKey))
-                {
-                    selectList.AddItem(_greenshotLanguage[languageKey], iniValue, (bool)iniValue.Value);
-                }
-                else
-                {
-                    Log.Warn().WriteLine("Missing translation for {0}", languageKey);
-                }
-            }
-            iniValue = _coreConfiguration.GetIniValue("ShowTrayNotification");
-            languageKey = _coreConfiguration.GetTagValue(iniValue.PropertyName, ConfigTags.LanguageKey) as string;
-            if (!_coreConfiguration.IsWriteProtected(iniValue.PropertyName))
-            {
-                if (languageKeys.Contains(languageKey))
-                {
-                    selectList.AddItem(_greenshotLanguage[languageKey], iniValue, (bool)iniValue.Value);
-                }
-                else
-                {
-                    Log.Warn().WriteLine("Missing translation for {0}", languageKey);
-                }
-            }
-            if (selectList.DropDownItems.Count > 0)
-            {
-                selectList.CheckedChanged += QuickSettingBoolItemChanged;
-                contextmenu_quicksettings.DropDownItems.Add(selectList);
-            }
-            else
-            {
-                selectList.Dispose();
-            }
-        }
-
-        private void QuickSettingCaptureModeChanged(object sender, EventArgs e)
-        {
-            var item = ((ItemCheckedChangedEventArgs) e).Item;
-            var windowsCaptureMode = (WindowCaptureModes) item.Data;
-            if (item.Checked)
-            {
-                _coreConfiguration.WindowCaptureMode = windowsCaptureMode;
-            }
-        }
-
-        private void QuickSettingBoolItemChanged(object sender, EventArgs e)
-        {
-            var item = ((ItemCheckedChangedEventArgs) e).Item;
-            if (item.Data is IniValue iniValue)
-            {
-                iniValue.Value = item.Checked;
-            }
-        }
-
-        private void QuickSettingDestinationChanged(object sender, EventArgs e)
-        {
-            var item = ((ItemCheckedChangedEventArgs) e).Item;
-            var selectedDestination = (IDestination) item.Data;
-            if (item.Checked)
-            {
-                if (selectedDestination.Designation.Equals(typeof(PickerDestination).GetDesignation()))
-                {
-                    // If the item is the destination picker, remove all others
-                    _coreConfiguration.OutputDestinations.Clear();
-                }
-                else
-                {
-                    // If the item is not the destination picker, remove the picker
-                    _coreConfiguration.OutputDestinations.Remove(typeof(PickerDestination).GetDesignation());
-                }
-                // Checked an item, add if the destination is not yet selected
-                if (!_coreConfiguration.OutputDestinations.Contains(selectedDestination.Designation))
-                {
-                    _coreConfiguration.OutputDestinations.Add(selectedDestination.Designation);
-                }
-            }
-            else
-            {
-                // deselected a destination, only remove if it was selected
-                if (_coreConfiguration.OutputDestinations.Contains(selectedDestination.Designation))
-                {
-                    _coreConfiguration.OutputDestinations.Remove(selectedDestination.Designation);
-                }
-            }
-            // Check if something was selected, if not make the picker the default
-            if (_coreConfiguration.OutputDestinations == null || _coreConfiguration.OutputDestinations.Count == 0)
-            {
-                _coreConfiguration.OutputDestinations.Add(typeof(PickerDestination).GetDesignation());
-            }
-
-            // Rebuild the quick settings menu with the new settings.
-            InitializeQuickSettingsMenu();
         }
     }
 }

@@ -92,12 +92,6 @@ namespace Greenshot.Components
         }
 
         /// <inheritdoc />
-        public void Startup()
-        {
-            _ = BackgroundTask(() => TimeSpan.FromDays(_coreConfiguration.UpdateCheckInterval), UpdateCheck, _cancellationTokenSource.Token);
-        }
-
-        /// <inheritdoc />
         public void Shutdown()
         {
             if (!_cancellationTokenSource.IsCancellationRequested)
@@ -106,141 +100,8 @@ namespace Greenshot.Components
             }
         }
 
-        /// <summary>
-        /// This runs a periodic task in the background
-        /// </summary>
-        /// <param name="intervalFactory">Func which returns a TimeSpan</param>
-        /// <param name="reoccurringTask">Func which returns a task</param>
-        /// <param name="cancellationToken">CancellationToken</param>
-        /// <returns>Task</returns>
-        private async Task BackgroundTask(Func<TimeSpan> intervalFactory, Func<CancellationToken, Task> reoccurringTask, CancellationToken cancellationToken = default)
+        public void Startup()
         {
-            // Initial delay, to make sure this doesn't happen at the startup
-            await Task.Delay(20000, cancellationToken);
-            Log.Info().WriteLine("Starting background task to check for updates");
-            await Task.Run(async () =>
-            {
-                while (!cancellationToken.IsCancellationRequested)
-                {
-                    var interval = intervalFactory();
-                    var task = reoccurringTask;
-                    // If the check is disabled, handle that here
-                    if (TimeSpan.Zero == interval)
-                    {
-                        interval = TimeSpan.FromMinutes(10);
-                        task = c => Task.FromResult(true);
-                    }
-
-                    try
-                    {
-                        await task(cancellationToken).ConfigureAwait(false);
-                    }
-                    catch (Exception ex)
-                    {
-                        Log.Error().WriteLine(ex, "Error occured when trying to check for updates.");
-                    }
-
-                    try
-                    {
-                        await Task.Delay(interval, cancellationToken).ConfigureAwait(false);
-                    }
-                    catch (TaskCanceledException)
-                    {
-                        // Ignore, this always happens
-                    }
-                    catch (Exception ex)
-                    {
-                        Log.Error().WriteLine(ex, "Error occured await for the next update check.");
-                    }
-
-                }
-            }, cancellationToken).ConfigureAwait(false);
-        }
-
-        /// <summary>
-        /// Do the actual update check
-        /// </summary>
-        /// <param name="cancellationToken">CancellationToken</param>
-        /// <returns>Task</returns>
-        private async Task UpdateCheck(CancellationToken cancellationToken = default)
-        {
-            Log.Info().WriteLine("Checking for updates from {0}", UpdateFeed);
-            var updateFeed = await UpdateFeed.GetAsAsync<SyndicationFeed>(cancellationToken);
-            if (updateFeed == null)
-            {
-                return;
-            }
-
-            if (_coreConfiguration != null)
-            {
-                _coreConfiguration.LastUpdateCheck = DateTime.Now;
-            }
-
-            ProcessFeed(updateFeed);
-            
-            if (IsUpdateAvailable)
-            {
-                ShowUpdate(LatestVersion);
-            }
-        }
-
-
-        /// <summary>
-        /// This takes care of creating the toast view model, publishing it, and disposing afterwards
-        /// </summary>
-        private void ShowUpdate(Version latestVersion)
-        {
-            // Create the ViewModel "part"
-            var message = _updateNotificationViewModelFactory(latestVersion);
-            // Prepare to dispose the view model parts automatically if it's finished
-            void DisposeHandler(object sender, DeactivationEventArgs args)
-            {
-                message.Value.Deactivated -= DisposeHandler;
-                message.Dispose();
-            }
-
-            message.Value.Deactivated += DisposeHandler;
-
-            // Show the ViewModel as toast 
-            _eventAggregator.PublishOnUIThread(message.Value);
-        }
-
-        /// <summary>
-        /// Process the update feed to get the latest version
-        /// </summary>
-        /// <param name="updateFeed"></param>
-        public void ProcessFeed(SyndicationFeed updateFeed)
-        {
-            var versions =
-                from link in updateFeed.Items.SelectMany(i => i.Links)
-                select VersionRegex.Match(link.Uri.AbsoluteUri) into match
-                where match.Success
-                group match by Regex.Replace(match.Groups["type"].Value, @"[\d-]", string.Empty) into groupedVersions
-                select groupedVersions.OrderByDescending(m => new Version(m.Groups["version"].Value)).First();
-         
-            foreach (var versionMatch in versions)
-            {
-                var version = new Version(versionMatch.Groups["version"].Value);
-                var type = versionMatch.Groups["type"].Value;
-                if (string.IsNullOrEmpty(type))
-                {
-                    continue;
-                }
-                Log.Debug().WriteLine("Got {0} {1}", type, version);
-                if ("release".Equals(type, StringComparison.OrdinalIgnoreCase))
-                {
-                    LatestVersion = version;
-                }
-                if ("beta".Equals(type, StringComparison.OrdinalIgnoreCase))
-                {
-                    BetaVersion = version;
-                }
-                
-                if (type.StartsWith("rc", StringComparison.OrdinalIgnoreCase))
-                {
-                    ReleaseCandidateVersion = version;
-                }
-            }
         }
     }
 }

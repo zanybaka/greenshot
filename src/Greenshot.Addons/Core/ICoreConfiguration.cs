@@ -56,10 +56,6 @@ namespace Greenshot.Addons.Core
         [DefaultValue("Shift + PrintScreen")]
         string LastregionHotkey { get; set; }
 
-        [Description("Hotkey for starting the IE capture")]
-        [DefaultValue("Shift + Ctrl + PrintScreen")]
-        string IEHotkey { get; set; }
-
         [Description("Is this the first time launch?")]
         [DefaultValue(true)]
         bool IsFirstLaunch { get; set; }
@@ -79,10 +75,6 @@ namespace Greenshot.Addons.Core
         [DefaultValue(false)]
         bool WindowCaptureAllChildLocations { get; set; }
 
-        [Description("Play a camera sound after taking a capture.")]
-        [DefaultValue(false)]
-        bool PlayCameraSound { get; set; }
-
         [Description("Show a notification from the systray when a capture is taken.")]
         [DefaultValue(true)]
         bool ShowTrayNotification { get; set; }
@@ -94,74 +86,9 @@ namespace Greenshot.Addons.Core
         [Description("SaveAs Full path?")]
         string OutputFileAsFullpath { get; set; }
 
-        [Description("Ask for print options when printing?")]
-        [DefaultValue(true)]
-        [Tag(ConfigTags.LanguageKey, "settings_alwaysshowprintoptionsdialog")]
-        bool OutputPrintPromptOptions { get; set; }
-
-        [Description("Allow rotating the picture for fitting on paper?")]
-        [DefaultValue(false)]
-        [Tag(ConfigTags.LanguageKey, "printoptions_allowrotate")]
-        bool OutputPrintAllowRotate { get; set; }
-
-        [Description("Allow growing the picture for fitting on paper?")]
-        [DefaultValue(false)]
-        [Tag(ConfigTags.LanguageKey, "printoptions_allowenlarge")]
-        bool OutputPrintAllowEnlarge { get; set; }
-
-        [Description("Allow shrinking the picture for fitting on paper?")]
-        [DefaultValue(true)]
-        [Tag(ConfigTags.LanguageKey, "printoptions_allowshrink")]
-        bool OutputPrintAllowShrink { get; set; }
-
-        [Description("Center image when printing?")]
-        [DefaultValue(true)]
-        [Tag(ConfigTags.LanguageKey, "printoptions_allowcenter")]
-        bool OutputPrintCenter { get; set; }
-
-        [Description("Print image inverted (use e.g. for console captures)")]
-        [DefaultValue(false)]
-        [Tag(ConfigTags.LanguageKey, "printoptions_inverted")]
-        bool OutputPrintInverted { get; set; }
-
-        [Description("Force grayscale printing")]
-        [DefaultValue(false)]
-        [Tag(ConfigTags.LanguageKey, "printoptions_printgrayscale")]
-        bool OutputPrintGrayscale { get; set; }
-
-        [Description("Force monorchrome printing")]
-        [DefaultValue(false)]
-        [Tag(ConfigTags.LanguageKey, "printoptions_printmonochrome")]
-        bool OutputPrintMonochrome { get; set; }
-
-        [Description("Threshold for monochrome filter (0 - 255), lower value means less black")]
-        [DefaultValue(127)]
-        byte OutputPrintMonochromeThreshold { get; set; }
-
-        [Description("Print footer on print?")]
-        [DefaultValue(true)]
-        [Tag(ConfigTags.LanguageKey, "printoptions_timestamp")]
-        bool OutputPrintFooter { get; set; }
-
-        [Description("Footer pattern")]
-        [DefaultValue("${capturetime:d\"D\"} ${capturetime:d\"T\"} - ${title}")]
-        string OutputPrintFooterPattern { get; set; }
-
-        [Description("The wav-file to play when a capture is taken, loaded only once at the Greenshot startup")]
-        [DefaultValue("default")]
-        string NotificationSound { get; set; }
-
         [Description("Use your global proxy?")]
         [DefaultValue(true)]
         bool UseProxy { get; set; }
-
-        [Description("Enable/disable IE field capture, very slow but will make it possible to annotate the fields of a capture in the editor.")]
-        [DefaultValue(false)]
-        bool IEFieldCapture { get; set; }
-
-        [Description("Comma separated list of Window-Classes which need to be checked for a IE instance!")]
-        [DefaultValue("AfxFrameOrView70,IMWindowClass")]
-        IList<string> WindowClassesToCheckForIE { get; set; }
 
         [Description("Sets how to compare the colors for the autocrop detection, the higher the more is 'selected'. Possible values are from 0 to 255, where everything above ~150 doesn't make much sense!")]
         [DefaultValue(10)]
@@ -176,32 +103,13 @@ namespace Greenshot.Addons.Core
         [Description("Comma separated list of destinations which should be disabled.")]
         IList<string> ExcludeDestinations { get; set; }
 
-        [Description("Should Greenshot check for updates?")]
-        [DefaultValue(true)]
-        bool CheckForUpdates { get; set; }
-
-        [Description("How many days between every update check? (0=no checks)")]
-        [DefaultValue(14)]
-        int UpdateCheckInterval { get; set; }
-
-        [Description("Last update check")]
-        DateTime LastUpdateCheck { get; set; }
-
         [Description("Enable/disable the access to the settings, can only be changed manually in this .ini")]
         [DefaultValue(false)]
         bool DisableSettings { get; set; }
 
-        [Description("Enable/disable the access to the quick settings, can only be changed manually in this .ini")]
-        [DefaultValue(false)]
-        bool DisableQuickSettings { get; set; }
-
         [Description("Disable the trayicon, can only be changed manually in this .ini")]
         [DefaultValue(false)]
         bool HideTrayicon { get; set; }
-
-        [Description("Hide expert tab in the settings, can only be changed manually in this .ini")]
-        [DefaultValue(false)]
-        bool HideExpertSettings { get; set; }
 
         [Description("Enable/disable thumbnail previews")]
         [DefaultValue(true)]
@@ -218,10 +126,6 @@ namespace Greenshot.Addons.Core
         [Description("Optimize memory footprint, but with a performance penalty!")]
         [DefaultValue(false)]
         bool MinimizeWorkingSetSize { get; set; }
-
-        [Description("Also check for unstable version updates")]
-        [DefaultValue(false)]
-        bool CheckForUnstable { get; set; }
 
         [Description("The fixes that are active.")]
         IList<string> ActiveTitleFixes { get; set; }
