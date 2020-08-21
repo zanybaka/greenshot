@@ -33,7 +33,6 @@ namespace Greenshot.Addons.Interfaces
 		LastRegion,
 		Clipboard,
 		File,
-		IE,
 		Scroll,
 		Import
 	}

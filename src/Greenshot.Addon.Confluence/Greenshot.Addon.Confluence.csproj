@@ -17,7 +17,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Greenshot.Addon.InternetExplorer\Greenshot.Addon.InternetExplorer.csproj" />
     <ProjectReference Include="..\Greenshot.Addons\Greenshot.Addons.csproj" />
     <ProjectReference Include="..\Greenshot.Core\Greenshot.Core.csproj" />
     <ProjectReference Include="..\Greenshot.Gfx\Greenshot.Gfx.csproj" />

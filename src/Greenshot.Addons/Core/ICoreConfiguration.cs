@@ -155,10 +155,6 @@ namespace Greenshot.Addons.Core
         [DefaultValue(true)]
         bool UseProxy { get; set; }
 
-        [Description("Enable/disable IE capture")]
-        [DefaultValue(true)]
-        bool IECapture { get; set; }
-
         [Description("Enable/disable IE field capture, very slow but will make it possible to annotate the fields of a capture in the editor.")]
         [DefaultValue(false)]
         bool IEFieldCapture { get; set; }

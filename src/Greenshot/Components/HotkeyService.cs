@@ -95,13 +95,6 @@ namespace Greenshot.Components
                 .Where(HotkeyTrigger)
                 .Subscribe(CaptureWindow, () => windowHotKeyHandler.Dispose());
 
-            // IE hotkey
-            var ieHotKeyHandler = new HotKeyHandler(_coreConfiguration, nameof(ICoreConfiguration.IEHotkey));
-            _subscriptions = syncedEvents
-                .Where(ieHotKeyHandler)
-                .Where(HotkeyTrigger)
-                .Subscribe(CaptureIe, () => ieHotKeyHandler.Dispose());
-
             Log.Debug().WriteLine("Started hotkeys");
         }
 
@@ -137,14 +130,6 @@ namespace Greenshot.Components
         private void CaptureLast(KeyboardHookEventArgs keyboardHookEventArgs)
         {
             Execute.BeginOnUIThread(() => CaptureHelper.CaptureLastRegion(_captureSupportInfo, true));
-        }
-
-        private void CaptureIe(KeyboardHookEventArgs keyboardHookEventArgs)
-        {
-            if (_coreConfiguration.IECapture)
-            {
-                Execute.BeginOnUIThread(() => CaptureHelper.CaptureIe(_captureSupportInfo, true, null));
-            }
         }
     }
 }

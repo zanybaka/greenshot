@@ -41,7 +41,6 @@ using Dapplo.Windows.Common.Structs;
 using Dapplo.Windows.DesktopWindowsManager;
 using Dapplo.Windows.Dpi.Forms;
 using Dapplo.Windows.Kernel32;
-using Greenshot.Addon.InternetExplorer;
 using Greenshot.Addons;
 using Greenshot.Addons.Components;
 using Greenshot.Addons.Controls;
@@ -69,7 +68,6 @@ namespace Greenshot.Forms
         private readonly ICoreConfiguration _coreConfiguration;
         private readonly IWindowManager _windowManager;
         private readonly IGreenshotLanguage _greenshotLanguage;
-        private readonly InternetExplorerCaptureHelper _internetExplorerCaptureHelper;
         private readonly Func<Owned<ConfigViewModel>> _configViewModelFactory;
         private readonly Func<Owned<AboutForm>> _aboutFormFactory;
         private readonly Func<IBitmapWithNativeSupport, Bitmap> _valueConverter = bitmap => bitmap?.NativeBitmap;
@@ -88,7 +86,6 @@ namespace Greenshot.Forms
         public MainForm(ICoreConfiguration coreConfiguration,
             IWindowManager windowManager,
             IGreenshotLanguage greenshotLanguage,
-            InternetExplorerCaptureHelper internetExplorerCaptureHelper,
             Func<Owned<ConfigViewModel>> configViewModelFactory,
             Func<Owned<AboutForm>> aboutFormFactory,
             DestinationHolder destinationHolder,
@@ -98,7 +95,6 @@ namespace Greenshot.Forms
             _coreConfiguration = coreConfiguration;
             _windowManager = windowManager;
             _greenshotLanguage = greenshotLanguage;
-            _internetExplorerCaptureHelper = internetExplorerCaptureHelper;
             _configViewModelFactory = configViewModelFactory;
             _aboutFormFactory = aboutFormFactory;
             _destinationHolder = destinationHolder;
@@ -215,7 +211,6 @@ namespace Greenshot.Forms
             contextmenu_capturelastregion.ShortcutKeyDisplayString = HotkeyControl.GetLocalizedHotkeyStringFromString(_coreConfiguration.LastregionHotkey);
             contextmenu_capturewindow.ShortcutKeyDisplayString = HotkeyControl.GetLocalizedHotkeyStringFromString(_coreConfiguration.WindowHotkey);
             contextmenu_capturefullscreen.ShortcutKeyDisplayString = HotkeyControl.GetLocalizedHotkeyStringFromString(_coreConfiguration.FullscreenHotkey);
-            contextmenu_captureie.ShortcutKeyDisplayString = HotkeyControl.GetLocalizedHotkeyStringFromString(_coreConfiguration.IEHotkey);
         }
 
         /// <summary>
@@ -410,7 +405,6 @@ namespace Greenshot.Forms
             var exeBitmapScaleHandler = BitmapScaleHandler.Create<string, IBitmapWithNativeSupport>(ContextMenuDpiHandler,
                 (path, dpi) => PluginUtils.GetCachedExeIcon(path, 0, dpi >= 120),
                 (bitmap, dpi) => bitmap.ScaleIconForDisplaying(dpi));
-            exeBitmapScaleHandler.AddTarget(contextmenu_captureie, PluginUtils.GetExePath("iexplore.exe"), _valueConverter);
 
             // Add cleanup
             Application.ApplicationExit += (sender, args) =>
@@ -452,14 +446,6 @@ namespace Greenshot.Forms
             }
         }
         
-        private void CaptureIe()
-        {
-            if (_coreConfiguration.IECapture)
-            {
-                CaptureHelper.CaptureIe(_captureSupportInfo, true, null);
-            }
-        }
-
         private void ContextMenuOpening(object sender, CancelEventArgs e)
         {
             using (var clipboardAccessToken = ClipboardNative.Access())
@@ -467,25 +453,6 @@ namespace Greenshot.Forms
                 contextmenu_captureclipboard.Enabled = clipboardAccessToken.HasImage();
             }
             contextmenu_capturelastregion.Enabled = _coreConfiguration.LastCapturedRegion != NativeRect.Empty;
-
-            // IE context menu code
-            try
-            {
-                if (_coreConfiguration.IECapture && _internetExplorerCaptureHelper.IsIeRunning())
-                {
-                    contextmenu_captureie.Enabled = true;
-                    contextmenu_captureiefromlist.Enabled = true;
-                }
-                else
-                {
-                    contextmenu_captureie.Enabled = false;
-                    contextmenu_captureiefromlist.Enabled = false;
-                }
-            }
-            catch (Exception ex)
-            {
-                Log.Warn().WriteLine("Problem accessing IE information: {0}", ex.Message);
-            }
 
             // Multi-Screen captures
             contextmenu_capturefullscreen.Click -= CaptureFullScreenToolStripMenuItemClick;
@@ -512,67 +479,8 @@ namespace Greenshot.Forms
 
         private void ContextMenuClosing(object sender, EventArgs e)
         {
-            contextmenu_captureiefromlist.DropDownItems.Clear();
             contextmenu_capturewindowfromlist.DropDownItems.Clear();
             CleanupThumbnail();
-        }
-
-        /// <summary>
-        ///     Build a selectable list of IE tabs when we enter the menu item
-        /// </summary>
-        private void CaptureIeMenuDropDownOpening(object sender, EventArgs e)
-        {
-            if (!_coreConfiguration.IECapture)
-            {
-                return;
-            }
-            try
-            {
-                var tabs = _internetExplorerCaptureHelper.GetBrowserTabs();
-                contextmenu_captureiefromlist.DropDownItems.Clear();
-                if (tabs.Count > 0)
-                {
-                    contextmenu_captureie.Enabled = true;
-                    contextmenu_captureiefromlist.Enabled = true;
-                    var counter = new Dictionary<IInteropWindow, int>();
-
-                    foreach (var tabData in tabs)
-                    {
-                        var title = tabData.Value;
-                        if (title == null)
-                        {
-                            continue;
-                        }
-                        if (title.Length > _coreConfiguration.MaxMenuItemLength)
-                        {
-                            title = title.Substring(0, Math.Min(title.Length, _coreConfiguration.MaxMenuItemLength));
-                        }
-                        var captureIeTabItem = contextmenu_captureiefromlist.DropDownItems.Add(title);
-                        var index = counter.ContainsKey(tabData.Key) ? counter[tabData.Key] : 0;
-                        captureIeTabItem.Image = tabData.Key.GetDisplayIcon().NativeBitmap;
-                        captureIeTabItem.Tag = new KeyValuePair<IInteropWindow, int>(tabData.Key, index++);
-                        captureIeTabItem.Click += Contextmenu_captureiefromlist_Click;
-                        contextmenu_captureiefromlist.DropDownItems.Add(captureIeTabItem);
-                        if (counter.ContainsKey(tabData.Key))
-                        {
-                            counter[tabData.Key] = index;
-                        }
-                        else
-                        {
-                            counter.Add(tabData.Key, index);
-                        }
-                    }
-                }
-                else
-                {
-                    contextmenu_captureie.Enabled = false;
-                    contextmenu_captureiefromlist.Enabled = false;
-                }
-            }
-            catch (Exception ex)
-            {
-                Log.Warn().WriteLine("Problem accessing IE information: {0}", ex.Message);
-            }
         }
 
         /// <summary>
@@ -746,46 +654,6 @@ namespace Greenshot.Forms
                 {
                     var windowToCapture = (InteropWindow) clickedItem.Tag;
                     CaptureHelper.CaptureWindow(_captureSupportInfo, windowToCapture);
-                }
-                catch (Exception exception)
-                {
-                    Log.Error().WriteLine(exception);
-                }
-            });
-        }
-
-        private void Contextmenu_captureie_Click(object sender, EventArgs e)
-        {
-            CaptureIe();
-        }
-
-        private void Contextmenu_captureiefromlist_Click(object sender, EventArgs e)
-        {
-            if (!_coreConfiguration.IECapture)
-            {
-                Log.Info().WriteLine("IE Capture is disabled.");
-                return;
-            }
-            var clickedItem = (ToolStripMenuItem) sender;
-            var tabData = (KeyValuePair<IInteropWindow, int>) clickedItem.Tag;
-            BeginInvoke((MethodInvoker) delegate
-            {
-                var ieWindowToCapture = tabData.Key;
-                if (ieWindowToCapture != null && ieWindowToCapture.IsMinimized())
-                {
-                    ieWindowToCapture.Restore();
-                }
-                try
-                {
-                    _internetExplorerCaptureHelper.ActivateIeTab(ieWindowToCapture, tabData.Value);
-                }
-                catch (Exception exception)
-                {
-                    Log.Error().WriteLine(exception);
-                }
-                try
-                {
-                    CaptureHelper.CaptureIe(_captureSupportInfo, false, ieWindowToCapture);
                 }
                 catch (Exception exception)
                 {
