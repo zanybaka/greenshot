@@ -516,34 +516,6 @@ namespace Greenshot.Helpers {
 			Log.DebugFormat("Deregistering the BalloonTipClicked");
         }
 
-        /// <summary>
-		/// This is the SurfaceMessageEvent receiver
-		/// </summary>
-		/// <param name="sender">object</param>
-		/// <param name="eventArgs">SurfaceMessageEventArgs</param>
-		private void SurfaceMessageReceived(object sender, SurfaceMessageEventArgs eventArgs) {
-			if (string.IsNullOrEmpty(eventArgs?.Message)) {
-				return;
-			}
-            var notifyIconClassicMessageHandler = SimpleServiceProvider.Current.GetInstance<INotificationService>();
-			switch (eventArgs.MessageType) {
-				case SurfaceMessageTyp.Error:
-                    notifyIconClassicMessageHandler.ShowErrorMessage(eventArgs.Message, 10000);
-					break;
-				case SurfaceMessageTyp.Info:
-                    notifyIconClassicMessageHandler.ShowInfoMessage(eventArgs.Message, 10000, () =>
-                    {
-                        Log.Info("Clicked!");
-                    });
-					break;
-				case SurfaceMessageTyp.FileSaved:
-				case SurfaceMessageTyp.UploadedUri:
-					// Show a balloon and register an event handler to open the "capture" for if someone clicks the balloon.
-                    notifyIconClassicMessageHandler.ShowInfoMessage(eventArgs.Message, 10000, () => OpenCaptureOnClick(eventArgs));
-					break;
-			}
-		}
-
 		private void HandleCapture() {
 			// Flag to see if the image was "exported" so the FileEditor doesn't
 			// ask to save the file as long as nothing is done.

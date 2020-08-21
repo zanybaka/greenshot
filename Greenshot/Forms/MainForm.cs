@@ -429,8 +429,6 @@ namespace Greenshot {
 						break;
 					case CommandEnum.FirstLaunch:
                             LOG.Info("FirstLaunch: Created new configuration, showing balloon.");
-                            var notifyIconClassicMessageHandler = SimpleServiceProvider.Current.GetInstance<INotificationService>();
-                            notifyIconClassicMessageHandler.ShowInfoMessage(Language.GetFormattedString(LangKey.tooltip_firststart, HotkeyControl.GetLocalizedHotkeyStringFromString(_conf.RegionHotkey)), 2000, ShowSetting);
                         break;
 					case CommandEnum.ReloadConfig:
 						LOG.Info("Reload requested");

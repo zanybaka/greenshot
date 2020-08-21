@@ -75,10 +75,6 @@ namespace Greenshot {
             this.tabcontrol = new System.Windows.Forms.TabControl();
             this.tab_general = new GreenshotPlugin.Controls.GreenshotTabPage();
             this.groupbox_hotkeys = new GreenshotPlugin.Controls.GreenshotGroupBox();
-            this.label_lastregion_hotkey = new GreenshotPlugin.Controls.GreenshotLabel();
-            this.lastregion_hotkeyControl = new GreenshotPlugin.Controls.HotkeyControl();
-            this.label_ie_hotkey = new GreenshotPlugin.Controls.GreenshotLabel();
-            this.ie_hotkeyControl = new GreenshotPlugin.Controls.HotkeyControl();
             this.label_region_hotkey = new GreenshotPlugin.Controls.GreenshotLabel();
             this.label_window_hotkey = new GreenshotPlugin.Controls.GreenshotLabel();
             this.label_fullscreen_hotkey = new GreenshotPlugin.Controls.GreenshotLabel();
@@ -95,10 +91,6 @@ namespace Greenshot {
             this.numericUpDownWaitTime = new System.Windows.Forms.NumericUpDown();
             this.label_waittime = new GreenshotPlugin.Controls.GreenshotLabel();
             this.tab_output = new GreenshotPlugin.Controls.GreenshotTabPage();
-            this.tab_plugins = new GreenshotPlugin.Controls.GreenshotTabPage();
-            this.groupbox_plugins = new GreenshotPlugin.Controls.GreenshotGroupBox();
-            this.listview_plugins = new System.Windows.Forms.ListView();
-            this.button_pluginconfigure = new GreenshotPlugin.Controls.GreenshotButton();
             this.groupBoxColors = new GreenshotPlugin.Controls.GreenshotGroupBox();
             this.checkboxPrintInverted = new GreenshotPlugin.Controls.GreenshotCheckBox();
             this.radioBtnColorPrint = new GreenshotPlugin.Controls.GreenshotRadioButton();
@@ -137,8 +129,6 @@ namespace Greenshot {
             this.groupbox_capture.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownWaitTime)).BeginInit();
             this.tab_output.SuspendLayout();
-            this.tab_plugins.SuspendLayout();
-            this.groupbox_plugins.SuspendLayout();
             this.groupBoxColors.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -407,7 +397,6 @@ namespace Greenshot {
             this.tabcontrol.Controls.Add(this.tab_general);
             this.tabcontrol.Controls.Add(this.tab_capture);
             this.tabcontrol.Controls.Add(this.tab_output);
-            this.tabcontrol.Controls.Add(this.tab_plugins);
             this.tabcontrol.Location = new System.Drawing.Point(12, 13);
             this.tabcontrol.Name = "tabcontrol";
             this.tabcontrol.SelectedIndex = 0;
@@ -430,10 +419,6 @@ namespace Greenshot {
             // 
             // groupbox_hotkeys
             // 
-            this.groupbox_hotkeys.Controls.Add(this.label_lastregion_hotkey);
-            this.groupbox_hotkeys.Controls.Add(this.lastregion_hotkeyControl);
-            this.groupbox_hotkeys.Controls.Add(this.label_ie_hotkey);
-            this.groupbox_hotkeys.Controls.Add(this.ie_hotkeyControl);
             this.groupbox_hotkeys.Controls.Add(this.label_region_hotkey);
             this.groupbox_hotkeys.Controls.Add(this.label_window_hotkey);
             this.groupbox_hotkeys.Controls.Add(this.label_fullscreen_hotkey);
@@ -447,44 +432,6 @@ namespace Greenshot {
             this.groupbox_hotkeys.TabIndex = 15;
             this.groupbox_hotkeys.TabStop = false;
             this.groupbox_hotkeys.Text = "Hotkeys";
-            // 
-            // label_lastregion_hotkey
-            // 
-            this.label_lastregion_hotkey.LanguageKey = "contextmenu_capturelastregion";
-            this.label_lastregion_hotkey.Location = new System.Drawing.Point(6, 94);
-            this.label_lastregion_hotkey.Name = "label_lastregion_hotkey";
-            this.label_lastregion_hotkey.Size = new System.Drawing.Size(212, 20);
-            this.label_lastregion_hotkey.TabIndex = 53;
-            this.label_lastregion_hotkey.Text = "Capture last region";
-            // 
-            // lastregion_hotkeyControl
-            // 
-            this.lastregion_hotkeyControl.Hotkey = System.Windows.Forms.Keys.None;
-            this.lastregion_hotkeyControl.HotkeyModifiers = System.Windows.Forms.Keys.None;
-            this.lastregion_hotkeyControl.Location = new System.Drawing.Point(224, 94);
-            this.lastregion_hotkeyControl.Name = "lastregion_hotkeyControl";
-            this.lastregion_hotkeyControl.PropertyName = "LastregionHotkey";
-            this.lastregion_hotkeyControl.Size = new System.Drawing.Size(179, 20);
-            this.lastregion_hotkeyControl.TabIndex = 5;
-            // 
-            // label_ie_hotkey
-            // 
-            this.label_ie_hotkey.LanguageKey = "contextmenu_captureie";
-            this.label_ie_hotkey.Location = new System.Drawing.Point(6, 120);
-            this.label_ie_hotkey.Name = "label_ie_hotkey";
-            this.label_ie_hotkey.Size = new System.Drawing.Size(212, 20);
-            this.label_ie_hotkey.TabIndex = 51;
-            this.label_ie_hotkey.Text = "Capture Internet Explorer";
-            // 
-            // ie_hotkeyControl
-            // 
-            this.ie_hotkeyControl.Hotkey = System.Windows.Forms.Keys.None;
-            this.ie_hotkeyControl.HotkeyModifiers = System.Windows.Forms.Keys.None;
-            this.ie_hotkeyControl.Location = new System.Drawing.Point(224, 120);
-            this.ie_hotkeyControl.Name = "ie_hotkeyControl";
-            this.ie_hotkeyControl.PropertyName = "IEHotkey";
-            this.ie_hotkeyControl.Size = new System.Drawing.Size(179, 20);
-            this.ie_hotkeyControl.TabIndex = 6;
             // 
             // label_region_hotkey
             // 
@@ -670,61 +617,6 @@ namespace Greenshot {
             this.tab_output.TabIndex = 1;
             this.tab_output.Text = "Output";
             this.tab_output.UseVisualStyleBackColor = true;
-            // 
-            // tab_plugins
-            // 
-            this.tab_plugins.Controls.Add(this.groupbox_plugins);
-            this.tab_plugins.LanguageKey = "settings_plugins";
-            this.tab_plugins.Location = new System.Drawing.Point(4, 22);
-            this.tab_plugins.Name = "tab_plugins";
-            this.tab_plugins.Size = new System.Drawing.Size(423, 351);
-            this.tab_plugins.TabIndex = 2;
-            this.tab_plugins.Text = "Plugins";
-            this.tab_plugins.UseVisualStyleBackColor = true;
-            // 
-            // groupbox_plugins
-            // 
-            this.groupbox_plugins.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupbox_plugins.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.groupbox_plugins.Controls.Add(this.listview_plugins);
-            this.groupbox_plugins.Controls.Add(this.button_pluginconfigure);
-            this.groupbox_plugins.LanguageKey = "settings_plugins";
-            this.groupbox_plugins.Location = new System.Drawing.Point(0, 0);
-            this.groupbox_plugins.Name = "groupbox_plugins";
-            this.groupbox_plugins.Size = new System.Drawing.Size(423, 314);
-            this.groupbox_plugins.TabIndex = 0;
-            this.groupbox_plugins.TabStop = false;
-            this.groupbox_plugins.Text = "Plugins";
-            // 
-            // listview_plugins
-            // 
-            this.listview_plugins.Dock = System.Windows.Forms.DockStyle.Top;
-            this.listview_plugins.FullRowSelect = true;
-            this.listview_plugins.HideSelection = false;
-            this.listview_plugins.Location = new System.Drawing.Point(3, 16);
-            this.listview_plugins.Name = "listview_plugins";
-            this.listview_plugins.Size = new System.Drawing.Size(417, 263);
-            this.listview_plugins.TabIndex = 1;
-            this.listview_plugins.UseCompatibleStateImageBehavior = false;
-            this.listview_plugins.View = System.Windows.Forms.View.Details;
-            this.listview_plugins.SelectedIndexChanged += new System.EventHandler(this.Listview_pluginsSelectedIndexChanged);
-            this.listview_plugins.Click += new System.EventHandler(this.Listview_pluginsSelectedIndexChanged);
-            // 
-            // button_pluginconfigure
-            // 
-            this.button_pluginconfigure.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.button_pluginconfigure.AutoSize = true;
-            this.button_pluginconfigure.Enabled = false;
-            this.button_pluginconfigure.LanguageKey = "settings_configureplugin";
-            this.button_pluginconfigure.Location = new System.Drawing.Point(6, 285);
-            this.button_pluginconfigure.Name = "button_pluginconfigure";
-            this.button_pluginconfigure.Size = new System.Drawing.Size(75, 23);
-            this.button_pluginconfigure.TabIndex = 2;
-            this.button_pluginconfigure.Text = "Configure";
-            this.button_pluginconfigure.UseVisualStyleBackColor = true;
-            this.button_pluginconfigure.Click += new System.EventHandler(this.Button_pluginconfigureClick);
             // 
             // groupBoxColors
             // 
@@ -1070,9 +962,6 @@ namespace Greenshot {
             this.groupbox_capture.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownWaitTime)).EndInit();
             this.tab_output.ResumeLayout(false);
-            this.tab_plugins.ResumeLayout(false);
-            this.groupbox_plugins.ResumeLayout(false);
-            this.groupbox_plugins.PerformLayout();
             this.groupBoxColors.ResumeLayout(false);
             this.groupBoxColors.PerformLayout();
             this.ResumeLayout(false);
@@ -1085,10 +974,6 @@ namespace Greenshot {
 		private GreenshotPlugin.Controls.GreenshotLabel label_fullscreen_hotkey;
 		private GreenshotPlugin.Controls.GreenshotLabel label_window_hotkey;
 		private GreenshotPlugin.Controls.GreenshotLabel label_region_hotkey;
-		private GreenshotPlugin.Controls.HotkeyControl ie_hotkeyControl;
-		private GreenshotPlugin.Controls.GreenshotLabel label_ie_hotkey;
-		private GreenshotPlugin.Controls.HotkeyControl lastregion_hotkeyControl;
-		private GreenshotPlugin.Controls.GreenshotLabel label_lastregion_hotkey;
 		private GreenshotPlugin.Controls.GreenshotGroupBox groupbox_hotkeys;
 		private Greenshot.Controls.ColorButton colorButton_window_background;
 		private GreenshotPlugin.Controls.GreenshotRadioButton radiobuttonWindowCapture;
@@ -1099,10 +984,6 @@ namespace Greenshot {
 		private System.Windows.Forms.NumericUpDown numericUpDownWaitTime;
 		private GreenshotPlugin.Controls.GreenshotLabel label_waittime;
 		private GreenshotPlugin.Controls.GreenshotRadioButton radiobuttonInteractiveCapture;
-		private System.Windows.Forms.ListView listview_plugins;
-		private GreenshotPlugin.Controls.GreenshotButton button_pluginconfigure;
-		private GreenshotPlugin.Controls.GreenshotGroupBox groupbox_plugins;
-		private GreenshotPlugin.Controls.GreenshotTabPage tab_plugins;
 		private System.Windows.Forms.Button btnPatternHelp;
 		private GreenshotPlugin.Controls.GreenshotCheckBox checkbox_copypathtoclipboard;
 		private GreenshotPlugin.Controls.GreenshotTabPage tab_output;

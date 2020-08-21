@@ -82,11 +82,6 @@ namespace Greenshot {
 			window_hotkeyControl.Leave += LeaveHotkeyControl;
 			region_hotkeyControl.Enter += EnterHotkeyControl;
 			region_hotkeyControl.Leave += LeaveHotkeyControl;
-			ie_hotkeyControl.Enter += EnterHotkeyControl;
-			ie_hotkeyControl.Leave += LeaveHotkeyControl;
-			lastregion_hotkeyControl.Enter += EnterHotkeyControl;
-			lastregion_hotkeyControl.Leave += LeaveHotkeyControl;
-			DisplayPluginTab();
 			UpdateUi();
 			ExpertSettingsEnableState(false);
 			DisplaySettings();
@@ -166,41 +161,6 @@ namespace Greenshot {
 				availableModes = new[]{WindowCaptureMode.Auto, WindowCaptureMode.Screen, WindowCaptureMode.GDI, WindowCaptureMode.Aero, WindowCaptureMode.AeroTransparent};
 			}
 			PopulateComboBox(combobox_window_capture_mode, availableModes, selectedWindowCaptureMode);
-		}
-
-		private void DisplayPluginTab() {
-            if (!SimpleServiceProvider.Current.GetAllInstances<IGreenshotPlugin>().Any())
-            {
-                tabcontrol.TabPages.Remove(tab_plugins);
-                return;
-            }
-			// Draw the Plugin listview
-			listview_plugins.BeginUpdate();
-			listview_plugins.Items.Clear();
-			listview_plugins.Columns.Clear();
-			string[] columns = {
-				Language.GetString("settings_plugins_name"),
-				Language.GetString("settings_plugins_version"),
-				Language.GetString("settings_plugins_createdby"),
-				Language.GetString("settings_plugins_dllpath")};
-			foreach (string column in columns) {
-				listview_plugins.Columns.Add(column);
-			}
-			PluginHelper.Instance.FillListView(listview_plugins);
-			// Maximize Column size!
-			for (int i = 0; i < listview_plugins.Columns.Count; i++) {
-				listview_plugins.AutoResizeColumn(i, ColumnHeaderAutoResizeStyle.ColumnContent);
-				int width = listview_plugins.Columns[i].Width;
-				listview_plugins.AutoResizeColumn(i, ColumnHeaderAutoResizeStyle.HeaderSize);
-				if (width > listview_plugins.Columns[i].Width) {
-					listview_plugins.Columns[i].Width = width;
-				}
-			}
-			listview_plugins.EndUpdate();
-			listview_plugins.Refresh();
-
-			// Disable the configure button, it will be enabled when a plugin is selected AND isConfigurable
-			button_pluginconfigure.Enabled = false;
 		}
 
 		/// <summary>
@@ -431,14 +391,6 @@ namespace Greenshot {
 			// Convert %NUM% to ${NUM} for old language files!
 			filenamepatternText = Regex.Replace(filenamepatternText, "%([a-zA-Z_0-9]+)%", @"${$1}");
 			MessageBox.Show(filenamepatternText, Language.GetString(LangKey.settings_filenamepattern));
-		}
-
-		private void Listview_pluginsSelectedIndexChanged(object sender, EventArgs e) {
-			button_pluginconfigure.Enabled = PluginHelper.Instance.IsSelectedItemConfigurable(listview_plugins);
-		}
-
-		private void Button_pluginconfigureClick(object sender, EventArgs e) {
-			PluginHelper.Instance.ConfigureSelectedItem(listview_plugins);
 		}
 
 		private void Combobox_languageSelectedIndexChanged(object sender, EventArgs e) {
