@@ -15,9 +15,6 @@
     <StackPanel>
         <GroupBox Header="{Binding GreenshotLanguage.SettingsCapture}">
             <StackPanel>
-                <CheckBox Content="{Binding GreenshotLanguage.SettingsCaptureMousepointer}" IsChecked="{Binding CoreConfiguration.CaptureMousepointer}" />
-                <CheckBox Content="{Binding GreenshotLanguage.SettingsPlaysound}" IsChecked="{Binding CoreConfiguration.PlayCameraSound}" />
-                <CheckBox Content="{Binding GreenshotLanguage.SettingsShownotify}" IsChecked="{Binding CoreConfiguration.ShowTrayNotification}" />
                 <CheckBox Content="{Binding GreenshotLanguage.SettingsZoom}" IsChecked="{Binding CoreConfiguration.ZoomerEnabled}" />
                 <DockPanel LastChildFill="True">
                     <Label Content="{Binding GreenshotLanguage.SettingsCapture}" Width="100" />

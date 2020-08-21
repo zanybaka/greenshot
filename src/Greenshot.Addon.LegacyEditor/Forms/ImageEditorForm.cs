@@ -186,7 +186,6 @@ namespace Greenshot.Addon.LegacyEditor.Forms
             ScaleHandler.AddTarget(cutToolStripMenuItem, "cutToolStripMenuItem.Image", _converter);
             ScaleHandler.AddTarget(copyToolStripMenuItem, "copyToolStripMenuItem.Image", _converter);
             ScaleHandler.AddTarget(pasteToolStripMenuItem, "pasteToolStripMenuItem.Image", _converter);
-            ScaleHandler.AddTarget(preferencesToolStripMenuItem, "preferencesToolStripMenuItem.Image", _converter);
             ScaleHandler.AddTarget(addRectangleToolStripMenuItem, "addRectangleToolStripMenuItem.Image", _converter);
             ScaleHandler.AddTarget(addEllipseToolStripMenuItem, "addEllipseToolStripMenuItem.Image", _converter);
 
@@ -197,10 +196,8 @@ namespace Greenshot.Addon.LegacyEditor.Forms
             ScaleHandler.AddTarget(addSpeechBubbleToolStripMenuItem, "addSpeechBubbleToolStripMenuItem.Image", _converter);
             ScaleHandler.AddTarget(addCounterToolStripMenuItem, "addCounterToolStripMenuItem.Image", _converter);
             ScaleHandler.AddTarget(removeObjectToolStripMenuItem, "removeObjectToolStripMenuItem.Image", _converter);
-            ScaleHandler.AddTarget(helpToolStripMenuItem1, "helpToolStripMenuItem1.Image", _converter);
             ScaleHandler.AddTarget(btnSave, "btnSave.Image", _converter);
             ScaleHandler.AddTarget(btnClipboard, "btnClipboard.Image", _converter);
-            ScaleHandler.AddTarget(btnPrint, "btnPrint.Image", _converter);
             ScaleHandler.AddTarget(btnDelete, "btnDelete.Image", _converter);
             ScaleHandler.AddTarget(btnCut, "btnCut.Image", _converter);
             ScaleHandler.AddTarget(btnCopy, "btnCopy.Image", _converter);
@@ -208,7 +205,6 @@ namespace Greenshot.Addon.LegacyEditor.Forms
             ScaleHandler.AddTarget(btnUndo, "btnUndo.Image", _converter);
             ScaleHandler.AddTarget(btnRedo, "btnRedo.Image", _converter);
             ScaleHandler.AddTarget(btnSettings, "btnSettings.Image", _converter);
-            ScaleHandler.AddTarget(btnHelp, "btnHelp.Image", _converter);
             ScaleHandler.AddTarget(obfuscateModeButton, "obfuscateModeButton.Image", _converter);
             ScaleHandler.AddTarget(pixelizeToolStripMenuItem, "pixelizeToolStripMenuItem.Image", _converter);
             ScaleHandler.AddTarget(blurToolStripMenuItem, "blurToolStripMenuItem.Image", _converter);
@@ -313,10 +309,6 @@ namespace Greenshot.Addon.LegacyEditor.Forms
 
         private void UpdateUi()
         {
-            // Disable access to the settings, for feature #3521446
-            preferencesToolStripMenuItem.Visible = !_coreConfiguration.DisableSettings;
-            toolStripSeparator12.Visible = !_coreConfiguration.DisableSettings;
-            toolStripSeparator11.Visible = !_coreConfiguration.DisableSettings;
             btnSettings.Visible = !_coreConfiguration.DisableSettings;
 
             // Make sure Double-buffer is enabled
@@ -756,9 +748,6 @@ namespace Greenshot.Addon.LegacyEditor.Forms
                     ToolStripItemEndisabler.Disable(destinationsToolStrip);
                     ToolStripItemEndisabler.Disable(toolsToolStrip);
                     ToolStripItemEndisabler.Enable(closeToolStripMenuItem);
-                    ToolStripItemEndisabler.Enable(helpToolStripMenuItem);
-                    ToolStripItemEndisabler.Enable(aboutToolStripMenuItem);
-                    ToolStripItemEndisabler.Enable(preferencesToolStripMenuItem);
                     _controlsDisabledDueToConfirmable = true;
                 }
             }

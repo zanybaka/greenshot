@@ -48,7 +48,6 @@
   </ItemGroup>
   
   <ItemGroup>
-    <ProjectReference Include="..\Greenshot.Addon.ExternalCommand\Greenshot.Addon.ExternalCommand.csproj" />
     <ProjectReference Include="..\Greenshot.Addon.LegacyEditor\Greenshot.Addon.LegacyEditor.csproj" />
     <ProjectReference Include="..\Greenshot.Core\Greenshot.Core.csproj" />
     <ProjectReference Include="..\Greenshot.Gfx\Greenshot.Gfx.csproj" />

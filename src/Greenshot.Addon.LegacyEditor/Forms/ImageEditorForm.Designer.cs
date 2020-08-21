@@ -98,8 +98,6 @@ namespace Greenshot.Addon.LegacyEditor.Forms {
 			this.pasteToolStripMenuItem = new GreenshotToolStripMenuItem();
 			this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
 			this.duplicateToolStripMenuItem = new GreenshotToolStripMenuItem();
-			this.toolStripSeparator12 = new System.Windows.Forms.ToolStripSeparator();
-			this.preferencesToolStripMenuItem = new GreenshotToolStripMenuItem();
 			this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
 			this.autoCropToolStripMenuItem = new GreenshotToolStripMenuItem();
 			this.toolStripSeparator17 = new System.Windows.Forms.ToolStripSeparator();
@@ -125,13 +123,9 @@ namespace Greenshot.Addon.LegacyEditor.Forms {
 			this.saveElementsToolStripMenuItem = new GreenshotToolStripMenuItem();
 			this.loadElementsToolStripMenuItem = new GreenshotToolStripMenuItem();
 			this.pluginToolStripMenuItem = new GreenshotToolStripMenuItem();
-			this.helpToolStripMenuItem = new GreenshotToolStripMenuItem();
-			this.helpToolStripMenuItem1 = new GreenshotToolStripMenuItem();
-			this.aboutToolStripMenuItem = new GreenshotToolStripMenuItem();
 			this.destinationsToolStrip = new ToolStripEx();
 			this.btnSave = new GreenshotToolStripButton();
 			this.btnClipboard = new GreenshotToolStripButton();
-			this.btnPrint = new GreenshotToolStripButton();
 			this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
 			this.btnDelete = new GreenshotToolStripButton();
 			this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
@@ -142,9 +136,7 @@ namespace Greenshot.Addon.LegacyEditor.Forms {
 			this.btnRedo = new System.Windows.Forms.ToolStripButton();
 			this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
 			this.btnSettings = new GreenshotToolStripButton();
-			this.toolStripSeparator11 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripSeparator16 = new System.Windows.Forms.ToolStripSeparator();
-			this.btnHelp = new GreenshotToolStripButton();
 			this.propertiesToolStrip = new ToolStripEx();
 			this.obfuscateModeButton = new BindableToolStripDropDownButton();
 			this.pixelizeToolStripMenuItem = new GreenshotToolStripMenuItem();
@@ -522,8 +514,7 @@ namespace Greenshot.Addon.LegacyEditor.Forms {
 									this.fileStripMenuItem,
 									this.editToolStripMenuItem,
 									this.objectToolStripMenuItem,
-									this.pluginToolStripMenuItem,
-									this.helpToolStripMenuItem});
+									this.pluginToolStripMenuItem});
 			this.menuStrip1.Name = "menuStrip1";
 			this.menuStrip1.BackColor = System.Drawing.SystemColors.Control;
 			this.menuStrip1.TabIndex = 1;
@@ -549,8 +540,6 @@ namespace Greenshot.Addon.LegacyEditor.Forms {
 									this.pasteToolStripMenuItem,
 									this.toolStripSeparator4,
 									this.duplicateToolStripMenuItem,
-									this.toolStripSeparator12,
-									this.preferencesToolStripMenuItem,
 									this.toolStripSeparator5,
 									this.autoCropToolStripMenuItem,
 									this.toolStripSeparator17,
@@ -616,16 +605,6 @@ namespace Greenshot.Addon.LegacyEditor.Forms {
 			this.duplicateToolStripMenuItem.Name = "duplicateToolStripMenuItem";
 			this.duplicateToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.D)));
 			this.duplicateToolStripMenuItem.Click += new System.EventHandler(this.DuplicateToolStripMenuItemClick);
-			// 
-			// toolStripSeparator12
-			// 
-			this.toolStripSeparator12.Name = "toolStripSeparator12";
-			// 
-			// preferencesToolStripMenuItem
-			// 
-			this.preferencesToolStripMenuItem.LanguageKey = "contextmenu_settings";
-			this.preferencesToolStripMenuItem.Name = "preferencesToolStripMenuItem";
-			this.preferencesToolStripMenuItem.Click += new System.EventHandler(this.PreferencesToolStripMenuItemClick);
 			// 
 			// toolStripSeparator5
 			// 
@@ -802,28 +781,6 @@ namespace Greenshot.Addon.LegacyEditor.Forms {
 			this.pluginToolStripMenuItem.Name = "pluginToolStripMenuItem";
 			this.pluginToolStripMenuItem.Text = "Plugins";
 			this.pluginToolStripMenuItem.Visible = false;
-			// 
-			// helpToolStripMenuItem
-			// 
-			this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-									this.helpToolStripMenuItem1,
-									this.aboutToolStripMenuItem});
-			this.helpToolStripMenuItem.LanguageKey = "contextmenu_help";
-			this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
-			this.helpToolStripMenuItem.Text = "Help";
-			// 
-			// helpToolStripMenuItem1
-			// 
-			this.helpToolStripMenuItem1.LanguageKey = "contextmenu_help";
-			this.helpToolStripMenuItem1.Name = "helpToolStripMenuItem1";
-			this.helpToolStripMenuItem1.ShortcutKeys = System.Windows.Forms.Keys.F1;
-			this.helpToolStripMenuItem1.Click += new System.EventHandler(this.HelpToolStripMenuItem1Click);
-			// 
-			// aboutToolStripMenuItem
-			// 
-			this.aboutToolStripMenuItem.LanguageKey = "contextmenu_about";
-			this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-			this.aboutToolStripMenuItem.Click += new System.EventHandler(this.AboutToolStripMenuItemClick);
             // 
             // destinationsToolStrip
 		    // 
@@ -840,7 +797,6 @@ namespace Greenshot.Addon.LegacyEditor.Forms {
 			this.destinationsToolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
 									this.btnSave,
 									this.btnClipboard,
-									this.btnPrint,
 									this.toolStripSeparator2,
 									this.btnDelete,
 									this.toolStripSeparator3,
@@ -851,9 +807,7 @@ namespace Greenshot.Addon.LegacyEditor.Forms {
 									this.btnRedo,
 									this.toolStripSeparator6,
 									this.btnSettings,
-									this.toolStripSeparator11,
-									this.toolStripSeparator16,
-									this.btnHelp});
+									this.toolStripSeparator16});
 			// 
 			// btnSave
 			// 
@@ -870,15 +824,6 @@ namespace Greenshot.Addon.LegacyEditor.Forms {
 			this.btnClipboard.LanguageKey = "editor.editor_copyimagetoclipboard";
 			this.btnClipboard.Name = "btnClipboard";
 			this.btnClipboard.Click += new System.EventHandler(this.BtnClipboardClick);
-			// 
-			// btnPrint
-			// 
-			this.btnPrint.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-			this.btnPrint.ImageTransparentColor = System.Drawing.Color.Magenta;
-			this.btnPrint.LanguageKey = "editor.editor_print";
-			this.btnPrint.Name = "btnPrint";
-			this.btnPrint.Text = "Print";
-			this.btnPrint.Click += new System.EventHandler(this.BtnPrintClick);
 			// 
 			// toolStripSeparator2
 			// 
@@ -952,22 +897,9 @@ namespace Greenshot.Addon.LegacyEditor.Forms {
 			this.btnSettings.Name = "btnSettings";
 			this.btnSettings.Click += new System.EventHandler(this.BtnSettingsClick);
 			// 
-			// toolStripSeparator11
-			// 
-			this.toolStripSeparator11.Name = "toolStripSeparator11";
-			// 
 			// toolStripSeparator16
 			// 
 			this.toolStripSeparator16.Name = "toolStripSeparator16";
-			// 
-			// btnHelp
-			// 
-			this.btnHelp.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-			this.btnHelp.ImageTransparentColor = System.Drawing.Color.Magenta;
-			this.btnHelp.LanguageKey = "contextmenu_help";
-			this.btnHelp.Name = "btnHelp";
-			this.btnHelp.Text = "Help";
-			this.btnHelp.Click += new System.EventHandler(this.BtnHelpClick);
 			// 
 			// propertiesToolStrip
 			// 
@@ -1634,19 +1566,11 @@ namespace Greenshot.Addon.LegacyEditor.Forms {
 		private GreenshotToolStripMenuItem drawLineToolStripMenuItem;
 		private GreenshotToolStripButton btnLine;
 		private GreenshotToolStripButton btnSettings;
-		private GreenshotToolStripButton btnHelp;
-		private System.Windows.Forms.ToolStripSeparator toolStripSeparator11;
-		private GreenshotToolStripMenuItem aboutToolStripMenuItem;
-		private GreenshotToolStripMenuItem helpToolStripMenuItem1;
-		private GreenshotToolStripMenuItem helpToolStripMenuItem;
-		private GreenshotToolStripMenuItem preferencesToolStripMenuItem;
-		private System.Windows.Forms.ToolStripSeparator toolStripSeparator12;
 		private GreenshotToolStripMenuItem closeToolStripMenuItem;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator9;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator7;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator8;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator6;
-		private GreenshotToolStripButton btnPrint;
 		private GreenshotToolStripMenuItem duplicateToolStripMenuItem;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
 		private GreenshotToolStripMenuItem fileStripMenuItem;
