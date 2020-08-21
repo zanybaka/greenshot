@@ -60,21 +60,6 @@ namespace GreenshotPlugin.Core {
 				return surface.GetImageForExport();
 			};
 
-            // Add a SVG converter
-            StreamConverters["svg"] = (stream, s) =>
-            {
-                stream.Position = 0;
-                try
-                {
-                    return SvgImage.FromStream(stream).Image;
-                }
-                catch (Exception ex)
-                {
-                    Log.Error("Can't load SVG", ex);
-                }
-                return null;
-            };
-
 			static Image DefaultConverter(Stream stream, string s)
             {
                 stream.Position = 0;
