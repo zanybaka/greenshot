@@ -52,7 +52,7 @@ namespace Greenshot.Helpers
     {
         private static readonly LogSource Log = new LogSource();
         private readonly ICoreConfiguration _coreConfiguration;
-        private readonly bool _captureMouseCursor;
+        private readonly bool _captureMouseCursor = false;
 #pragma warning disable IDE0069 // Disable disposable fields should be disposed, as this cannot be disposed!
         private ICapture _capture;
 #pragma warning restore IDE0069 // Disposable fields should be disposed
@@ -286,7 +286,7 @@ namespace Greenshot.Helpers
             if (_captureMode != CaptureMode.File && _captureMode != CaptureMode.Clipboard)
             {
                 _capture = WindowCapture.CaptureCursor(_capture);
-                _capture.CursorVisible = _captureMouseCursor && _coreConfiguration.CaptureMousepointer;
+                _capture.CursorVisible = _captureMouseCursor;
             }
 
             switch (_captureMode)

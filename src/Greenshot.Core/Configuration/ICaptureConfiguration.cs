@@ -16,10 +16,6 @@ namespace Greenshot.Core.Configuration
         [DefaultValue("0,0")]
         NativeSize Win10BorderCrop { get; set; }
 
-        [Description("Should the mouse be captured?")]
-        [DefaultValue(true)]
-        bool CaptureMousepointer { get; set; }
-
         [Description("Use interactive window selection to capture? (false=Capture active window)")]
         [DefaultValue(false)]
         bool CaptureWindowsInteractive { get; set; }
