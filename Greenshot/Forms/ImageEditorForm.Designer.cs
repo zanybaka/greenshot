@@ -74,7 +74,6 @@ namespace Greenshot {
 			this.toolStripSplitButton1 = new GreenshotPlugin.Controls.GreenshotToolStripDropDownButton();
 			this.addBorderToolStripMenuItem = new GreenshotPlugin.Controls.GreenshotToolStripMenuItem();
 			this.addDropshadowToolStripMenuItem = new GreenshotPlugin.Controls.GreenshotToolStripMenuItem();
-			this.tornEdgesToolStripMenuItem = new GreenshotPlugin.Controls.GreenshotToolStripMenuItem();
 			this.grayscaleToolStripMenuItem = new GreenshotPlugin.Controls.GreenshotToolStripMenuItem();
 			this.invertToolStripMenuItem = new GreenshotPlugin.Controls.GreenshotToolStripMenuItem();
 			this.btnResize = new GreenshotPlugin.Controls.GreenshotToolStripButton();
@@ -120,13 +119,9 @@ namespace Greenshot {
 			this.saveElementsToolStripMenuItem = new GreenshotPlugin.Controls.GreenshotToolStripMenuItem();
 			this.loadElementsToolStripMenuItem = new GreenshotPlugin.Controls.GreenshotToolStripMenuItem();
 			this.pluginToolStripMenuItem = new GreenshotPlugin.Controls.GreenshotToolStripMenuItem();
-			this.helpToolStripMenuItem = new GreenshotPlugin.Controls.GreenshotToolStripMenuItem();
-			this.helpToolStripMenuItem1 = new GreenshotPlugin.Controls.GreenshotToolStripMenuItem();
-			this.aboutToolStripMenuItem = new GreenshotPlugin.Controls.GreenshotToolStripMenuItem();
 			this.destinationsToolStrip = new Greenshot.Controls.ToolStripEx();
 			this.btnSave = new GreenshotPlugin.Controls.GreenshotToolStripButton();
 			this.btnClipboard = new GreenshotPlugin.Controls.GreenshotToolStripButton();
-			this.btnPrint = new GreenshotPlugin.Controls.GreenshotToolStripButton();
 			this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
 			this.btnDelete = new GreenshotPlugin.Controls.GreenshotToolStripButton();
 			this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
@@ -470,7 +465,6 @@ namespace Greenshot {
 			this.toolStripSplitButton1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
 									this.addBorderToolStripMenuItem,
 									this.addDropshadowToolStripMenuItem,
-									this.tornEdgesToolStripMenuItem,
 									this.grayscaleToolStripMenuItem,
 									this.invertToolStripMenuItem});
 			this.toolStripSplitButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripSplitButton1.Image")));
@@ -491,12 +485,6 @@ namespace Greenshot {
 			this.addDropshadowToolStripMenuItem.LanguageKey = "editor_image_shadow";
 			this.addDropshadowToolStripMenuItem.Name = "addDropshadowToolStripMenuItem";
 			this.addDropshadowToolStripMenuItem.MouseUp += AddDropshadowToolStripMenuItemMouseUp;
-			// 
-			// tornEdgesToolStripMenuItem
-			// 
-			this.tornEdgesToolStripMenuItem.LanguageKey = "editor_torn_edge";
-			this.tornEdgesToolStripMenuItem.Name = "tornEdgesToolStripMenuItem";
-			this.tornEdgesToolStripMenuItem.MouseUp += TornEdgesToolStripMenuItemMouseUp;
 			// 
 			// grayscaleToolStripMenuItem
 			// 
@@ -561,8 +549,7 @@ namespace Greenshot {
 									this.editToolStripMenuItem,
 									this.objectToolStripMenuItem,
 									this.pluginToolStripMenuItem,
-									this.zoomMainMenuItem,
-									this.helpToolStripMenuItem});
+									this.zoomMainMenuItem});
 			this.menuStrip1.Name = "menuStrip1";
 			this.menuStrip1.BackColor = System.Drawing.SystemColors.Control;
 			this.menuStrip1.TabIndex = 1;
@@ -857,29 +844,6 @@ namespace Greenshot {
 			this.pluginToolStripMenuItem.Text = "Plugins";
 			this.pluginToolStripMenuItem.Visible = false;
 			// 
-			// helpToolStripMenuItem
-			// 
-			this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-									this.helpToolStripMenuItem1,
-									this.aboutToolStripMenuItem});
-			this.helpToolStripMenuItem.LanguageKey = "contextmenu_help";
-			this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
-			this.helpToolStripMenuItem.Text = "Help";
-			// 
-			// helpToolStripMenuItem1
-			// 
-			this.helpToolStripMenuItem1.Image = ((System.Drawing.Image)(resources.GetObject("helpToolStripMenuItem1.Image")));
-			this.helpToolStripMenuItem1.LanguageKey = "contextmenu_help";
-			this.helpToolStripMenuItem1.Name = "helpToolStripMenuItem1";
-			this.helpToolStripMenuItem1.ShortcutKeys = System.Windows.Forms.Keys.F1;
-			this.helpToolStripMenuItem1.Click += new System.EventHandler(this.HelpToolStripMenuItem1Click);
-			// 
-			// aboutToolStripMenuItem
-			// 
-			this.aboutToolStripMenuItem.LanguageKey = "contextmenu_about";
-			this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-			this.aboutToolStripMenuItem.Click += new System.EventHandler(this.AboutToolStripMenuItemClick);
-			// 
 			// destinationsToolStrip
 			// 
 			this.destinationsToolStrip.ClickThrough = true;
@@ -895,7 +859,6 @@ namespace Greenshot {
 			this.destinationsToolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
 									this.btnSave,
 									this.btnClipboard,
-									this.btnPrint,
 									this.toolStripSeparator2,
 									this.btnDelete,
 									this.toolStripSeparator3,
@@ -927,16 +890,6 @@ namespace Greenshot {
 			this.btnClipboard.LanguageKey = "editor_copyimagetoclipboard";
 			this.btnClipboard.Name = "btnClipboard";
 			this.btnClipboard.Click += new System.EventHandler(this.BtnClipboardClick);
-			// 
-			// btnPrint
-			// 
-			this.btnPrint.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-			this.btnPrint.Image = ((System.Drawing.Image)(resources.GetObject("btnPrint.Image")));
-			this.btnPrint.ImageTransparentColor = System.Drawing.Color.Magenta;
-			this.btnPrint.LanguageKey = "editor_print";
-			this.btnPrint.Name = "btnPrint";
-			this.btnPrint.Text = "Print";
-			this.btnPrint.Click += new System.EventHandler(this.BtnPrintClick);
 			// 
 			// toolStripSeparator2
 			// 
@@ -1855,7 +1808,6 @@ namespace Greenshot {
 		private GreenshotPlugin.Controls.GreenshotToolStripButton rotateCcwToolstripButton;
 		private GreenshotPlugin.Controls.GreenshotToolStripButton rotateCwToolstripButton;
 		private GreenshotPlugin.Controls.GreenshotToolStripMenuItem addBorderToolStripMenuItem;
-		private GreenshotPlugin.Controls.GreenshotToolStripMenuItem tornEdgesToolStripMenuItem;
 		private GreenshotPlugin.Controls.GreenshotToolStripMenuItem addDropshadowToolStripMenuItem;
 		private GreenshotPlugin.Controls.GreenshotToolStripDropDownButton toolStripSplitButton1;
 		private System.Windows.Forms.ToolStripStatusLabel dimensionsLabel;
@@ -1933,9 +1885,6 @@ namespace Greenshot {
 		private GreenshotPlugin.Controls.GreenshotToolStripButton btnSettings;
 		private GreenshotPlugin.Controls.GreenshotToolStripButton btnHelp;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator11;
-		private GreenshotPlugin.Controls.GreenshotToolStripMenuItem aboutToolStripMenuItem;
-		private GreenshotPlugin.Controls.GreenshotToolStripMenuItem helpToolStripMenuItem1;
-		private GreenshotPlugin.Controls.GreenshotToolStripMenuItem helpToolStripMenuItem;
 		private GreenshotPlugin.Controls.GreenshotToolStripMenuItem preferencesToolStripMenuItem;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator12;
 		private GreenshotPlugin.Controls.GreenshotToolStripMenuItem closeToolStripMenuItem;
@@ -1943,7 +1892,6 @@ namespace Greenshot {
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator7;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator8;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator6;
-		private GreenshotPlugin.Controls.GreenshotToolStripButton btnPrint;
 		private GreenshotPlugin.Controls.GreenshotToolStripMenuItem duplicateToolStripMenuItem;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
 		private GreenshotPlugin.Controls.GreenshotToolStripMenuItem fileStripMenuItem;

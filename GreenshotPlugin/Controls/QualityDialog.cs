@@ -54,7 +54,6 @@ namespace GreenshotPlugin.Controls {
 			Settings.ReduceColors = checkBox_reduceColors.Checked;
 			if (checkbox_dontaskagain.Checked) {
 				conf.OutputFileJpegQuality = Settings.JPGQuality;
-				conf.OutputFilePromptQuality = false;
 				conf.OutputFileReduceColors = Settings.ReduceColors;
 				IniConfig.Save();
 			}

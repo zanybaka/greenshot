@@ -34,7 +34,6 @@ namespace GreenshotPlugin.Interfaces
         LastRegion,
         Clipboard,
         File,
-        IE,
         Import,
         Text
         // Video

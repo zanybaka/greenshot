@@ -447,10 +447,6 @@ namespace GreenshotPlugin.Core {
 					try {
 						string fileNameWithExtension = saveImageFileDialog.FileNameWithExtension;
 						SurfaceOutputSettings outputSettings = new SurfaceOutputSettings(FormatForFilename(fileNameWithExtension));
-						if (CoreConfig.OutputFilePromptQuality) {
-							QualityDialog qualityDialog = new QualityDialog(outputSettings);
-							qualityDialog.ShowDialog();
-						}
 						// TODO: For now we always overwrite, should be changed
 						Save(surface, fileNameWithExtension, true, outputSettings, CoreConfig.OutputFileCopyPathToClipboard);
 						returnValue = fileNameWithExtension;

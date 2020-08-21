@@ -82,8 +82,6 @@ namespace GreenshotPlugin.Core {
 		[IniProperty("ClipboardFormats", Separator=",", Description="Specify which formats we copy on the clipboard? Options are: PNG, HTML, HTMLDATAURL and DIB", DefaultValue="PNG,DIB")]
 		public List<ClipboardFormat> ClipboardFormats { get; set; } = new List<ClipboardFormat>();
 
-		[IniProperty("CaptureMousepointer", Description="Should the mouse be captured?", DefaultValue="true")]
-		public bool CaptureMousepointer { get; set; }
 		[IniProperty("CaptureWindowsInteractive", Description="Use interactive window selection to capture? (false=Capture active window)", DefaultValue="false")]
 		public bool CaptureWindowsInteractive { get; set; }
 		[IniProperty("CaptureDelay", Description="Capture delay in millseconds.", DefaultValue="100")]
@@ -99,11 +97,6 @@ namespace GreenshotPlugin.Core {
 
 		[IniProperty("DWMBackgroundColor", Description="The background color for a DWM window capture.")]
 		public Color DWMBackgroundColor { get; set; }
-
-		[IniProperty("PlayCameraSound", LanguageKey="settings_playsound",Description="Play a camera sound after taking a capture.", DefaultValue="false")]
-		public bool PlayCameraSound { get; set; } = false;
-		[IniProperty("ShowTrayNotification", LanguageKey="settings_shownotify",Description="Show a notification from the systray when a capture is taken.", DefaultValue="true")]
-		public bool ShowTrayNotification { get; set; } = true;
 
 		[IniProperty("OutputFilePath", Description="Output file path.")]
 		public string OutputFilePath { get; set; }
@@ -127,8 +120,6 @@ namespace GreenshotPlugin.Core {
 
 		[IniProperty("OutputFileJpegQuality", Description="JPEG file save quality in %.", DefaultValue="80")]
 		public int OutputFileJpegQuality { get; set; }
-		[IniProperty("OutputFilePromptQuality", Description="Ask for the quality before saving?", DefaultValue="false")]
-		public bool OutputFilePromptQuality { get; set; }
 		[IniProperty("OutputFileIncrementingNumber", Description="The number for the ${NUM} in the filename pattern, is increased automatically after each save.", DefaultValue="1")]
 		public uint OutputFileIncrementingNumber { get; set; }
 
@@ -154,12 +145,8 @@ namespace GreenshotPlugin.Core {
 		public bool OutputPrintFooter { get; set; }
 		[IniProperty("OutputPrintFooterPattern", Description = "Footer pattern", DefaultValue = "${capturetime:d\"D\"} ${capturetime:d\"T\"} - ${title}")]
 		public string OutputPrintFooterPattern { get; set; }
-		[IniProperty("NotificationSound", Description = "The wav-file to play when a capture is taken, loaded only once at the Greenshot startup", DefaultValue="default")]
-		public string NotificationSound { get; set; }
 		[IniProperty("UseProxy", Description="Use your global proxy?", DefaultValue="True")]
 		public bool UseProxy { get; set; }
-		[IniProperty("IECapture", Description="Enable/disable IE capture", DefaultValue="True")]
-		public bool IECapture { get; set; }
 		[IniProperty("IEFieldCapture", Description="Enable/disable IE field capture, very slow but will make it possible to annotate the fields of a capture in the editor.", DefaultValue="False")]
 		public bool IEFieldCapture { get; set; }
 		[IniProperty("WindowClassesToCheckForIE", Description = "Comma separated list of Window-Classes which need to be checked for a IE instance!", DefaultValue = "AfxFrameOrView70,IMWindowClass")]
@@ -181,12 +168,8 @@ namespace GreenshotPlugin.Core {
 
 		[IniProperty("DisableSettings", Description = "Enable/disable the access to the settings, can only be changed manually in this .ini", DefaultValue = "False")]
 		public bool DisableSettings { get; set; }
-		[IniProperty("DisableQuickSettings", Description = "Enable/disable the access to the quick settings, can only be changed manually in this .ini", DefaultValue = "False")]
-		public bool DisableQuickSettings { get; set; }
 		[IniProperty("DisableTrayicon", Description = "Disable the trayicon, can only be changed manually in this .ini", DefaultValue = "False")]
 		public bool HideTrayicon { get; set; }
-		[IniProperty("HideExpertSettings", Description = "Hide expert tab in the settings, can only be changed manually in this .ini", DefaultValue = "False")]
-		public bool HideExpertSettings { get; set; }
 
 		[IniProperty("ThumnailPreview", Description="Enable/disable thumbnail previews", DefaultValue="True")]
 		public bool ThumnailPreview { get; set; }

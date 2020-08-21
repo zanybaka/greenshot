@@ -70,11 +70,6 @@
     <WriteLinesToFile File="$(SolutionDir)$(SolutionName)\$(OutDir)\checksum.SHA256" Lines="@(FilesWithHashes->'%(Filename)%(Extension): %(FileHash)')" Overwrite="true" WriteOnlyWhenDifferent="true" />
   </Target>
 
-  <Target Name="PostBuild" BeforeTargets="PostBuildEvent" Condition="'$(Configuration)' == 'Release'">
-    <SetEnvironmentVariableTask Name="BuildVersionSimple" Value="$(BuildVersionSimple)" />
-    <SetEnvironmentVariableTask Name="AssemblyInformationalVersion" Value="$(AssemblyInformationalVersion)" />
-    <Exec Command="$(PkgTools_InnoSetup)\tools\ISCC.exe $(SolutionDir)\greenshot\releases\innosetup\setup.iss" />
-  </Target>
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
     <PostBuildEvent>
       copy "$(SolutionDir)Greenshot\log4net-debug.xml" "$(SolutionDir)Greenshot\bin\$(Configuration)\net472\log4net.xml"

@@ -49,7 +49,6 @@ namespace Greenshot {
 		private static readonly ILog Log = LogManager.GetLogger(typeof(SettingsForm));
 		private readonly ToolTip _toolTip = new ToolTip();
 		private bool _inHotkey;
-		private int _daysbetweencheckPreviousValue;
 
 		public SettingsForm() {
 			InitializeComponent();
@@ -87,47 +86,11 @@ namespace Greenshot {
 			ie_hotkeyControl.Leave += LeaveHotkeyControl;
 			lastregion_hotkeyControl.Enter += EnterHotkeyControl;
 			lastregion_hotkeyControl.Leave += LeaveHotkeyControl;
-			// Changes for BUG-2077
-			numericUpDown_daysbetweencheck.ValueChanged += NumericUpDownDaysbetweencheckOnValueChanged;
-
-			_daysbetweencheckPreviousValue = (int) numericUpDown_daysbetweencheck.Value;
 			DisplayPluginTab();
 			UpdateUi();
 			ExpertSettingsEnableState(false);
 			DisplaySettings();
 			CheckSettings();
-		}
-
-		/// <summary>
-		/// This makes sure the check cannot be set to 1-6
-		/// </summary>
-		/// <param name="sender">object</param>
-		/// <param name="eventArgs">EventArgs</param>
-		private void NumericUpDownDaysbetweencheckOnValueChanged(object sender, EventArgs eventArgs)
-		{
-			int currentValue = (int)numericUpDown_daysbetweencheck.Value;
-
-			// Check if we can into the forbidden range
-			if (currentValue > 0 && currentValue < 7)
-			{
-				if (_daysbetweencheckPreviousValue <= currentValue)
-				{
-					numericUpDown_daysbetweencheck.Value = 7;
-				}
-				else
-				{
-					numericUpDown_daysbetweencheck.Value = 0;
-				}
-			}
-			if ((int)numericUpDown_daysbetweencheck.Value < 0)
-			{
-				numericUpDown_daysbetweencheck.Value = 0;
-			}
-			if ((int)numericUpDown_daysbetweencheck.Value > 365)
-			{
-				numericUpDown_daysbetweencheck.Value = 365;
-			}
-			_daysbetweencheckPreviousValue = (int)numericUpDown_daysbetweencheck.Value;
 		}
 
 		private void EnterHotkeyControl(object sender, EventArgs e) {
@@ -244,9 +207,6 @@ namespace Greenshot {
 		/// Update the UI to reflect the language and other text settings
 		/// </summary>
 		private void UpdateUi() {
-			if (coreConfiguration.HideExpertSettings) {
-				tabcontrol.Controls.Remove(tab_expert);
-			}
 			_toolTip.SetToolTip(label_language, Language.GetString(LangKey.settings_tooltip_language));
 			_toolTip.SetToolTip(label_storagelocation, Language.GetString(LangKey.settings_tooltip_storagelocation));
 			_toolTip.SetToolTip(label_screenshotname, Language.GetString(LangKey.settings_tooltip_filenamepattern));
@@ -267,7 +227,6 @@ namespace Greenshot {
 
 			// Delaying the SelectedIndexChanged events untill all is initiated
 			combobox_language.SelectedIndexChanged += Combobox_languageSelectedIndexChanged;
-			UpdateDestinationDescriptions();
 			UpdateClipboardFormatDescriptions();
 		}
 
@@ -317,17 +276,6 @@ namespace Greenshot {
 		}
 
 		/// <summary>
-		/// Show all destination descriptions in the current language
-		/// </summary>
-		private void UpdateDestinationDescriptions() {
-			foreach (ListViewItem item in listview_destinations.Items) {
-                if (item.Tag is IDestination destinationFromTag) {
-					item.Text = destinationFromTag.Description;
-				}
-			}
-		}
-
-		/// <summary>
 		/// Show all clipboard format descriptions in the current language
 		/// </summary>
 		private void UpdateClipboardFormatDescriptions() {
@@ -335,53 +283,6 @@ namespace Greenshot {
 				ClipboardFormat cf = (ClipboardFormat) item.Tag;
 				item.Text = Language.Translate(cf);
 			}
-		}
-
-		/// <summary>
-		/// Build the view with all the destinations
-		/// </summary>
-		private void DisplayDestinations() {
-			bool destinationsEnabled = true;
-			if (coreConfiguration.Values.ContainsKey("Destinations")) {
-				destinationsEnabled = !coreConfiguration.Values["Destinations"].IsFixed;
-			}
-			checkbox_picker.Checked = false;
-
-			listview_destinations.Items.Clear();
-			var scaledIconSize = DpiHelper.ScaleWithDpi(coreConfiguration.IconSize, DpiHelper.GetDpi(Handle));
-			listview_destinations.ListViewItemSorter = new ListviewWithDestinationComparer();
-			ImageList imageList = new ImageList {ImageSize = scaledIconSize};
-			listview_destinations.SmallImageList = imageList;
-			int imageNr = -1;
-			foreach (IDestination currentDestination in DestinationHelper.GetAllDestinations()) {
-				Image destinationImage = currentDestination.DisplayIcon;
-				if (destinationImage != null) {
-					imageList.Images.Add(currentDestination.DisplayIcon);
-					imageNr++;
-				}
-				if (PickerDestination.DESIGNATION.Equals(currentDestination.Designation)) {
-					checkbox_picker.Checked = coreConfiguration.OutputDestinations.Contains(currentDestination.Designation);
-					checkbox_picker.Text = currentDestination.Description;
-				} else {
-					ListViewItem item;
-					if (destinationImage != null) {
-						item = listview_destinations.Items.Add(currentDestination.Description, imageNr);
-					} else {
-						item = listview_destinations.Items.Add(currentDestination.Description);
-					}
-					item.Tag = currentDestination;
-					item.Checked = coreConfiguration.OutputDestinations.Contains(currentDestination.Designation);
-				}
-			}
-			if (checkbox_picker.Checked) {
-				listview_destinations.Enabled = false;
-				foreach (int index in listview_destinations.CheckedIndices) {
-					ListViewItem item = listview_destinations.Items[index];
-					item.Checked = false;
-				}
-			}
-			checkbox_picker.Enabled = destinationsEnabled;
-			listview_destinations.Enabled = destinationsEnabled;
 		}
 
 		private void DisplaySettings() {
@@ -413,8 +314,6 @@ namespace Greenshot {
 			trackBarJpegQuality.Enabled = !coreConfiguration.Values["OutputFileJpegQuality"].IsFixed;
 			textBoxJpegQuality.Text = coreConfiguration.OutputFileJpegQuality+"%";
 
-			DisplayDestinations();
-
 			numericUpDownWaitTime.Value = coreConfiguration.CaptureDelay >=0?coreConfiguration.CaptureDelay:0;
 			numericUpDownWaitTime.Enabled = !coreConfiguration.Values["CaptureDelay"].IsFixed;
 			if (IniConfig.IsPortable) {
@@ -437,11 +336,8 @@ namespace Greenshot {
 				}
 			}
 
-			numericUpDown_daysbetweencheck.Value = coreConfiguration.UpdateCheckInterval;
-			numericUpDown_daysbetweencheck.Enabled = !coreConfiguration.Values["UpdateCheckInterval"].IsFixed;
 			var scaledIconSize = DpiHelper.ScaleWithDpi(coreConfiguration.IconSize, DpiHelper.GetDpi(Handle));
 			numericUpdownIconSize.Value = scaledIconSize.Width / 16 * 16;
-			CheckDestinationSettings();
 		}
 
 		private void SaveSettings() {
@@ -468,21 +364,8 @@ namespace Greenshot {
 			}
 			coreConfiguration.OutputFileJpegQuality = trackBarJpegQuality.Value;
 
-			List<string> destinations = new List<string>();
-			if (checkbox_picker.Checked) {
-				destinations.Add(PickerDestination.DESIGNATION);
-			}
-			foreach(int index in listview_destinations.CheckedIndices) {
-				ListViewItem item = listview_destinations.Items[index];
-
-                if (item.Checked && item.Tag is IDestination destinationFromTag) {
-					destinations.Add(destinationFromTag.Designation);
-				}
-			}
-			coreConfiguration.OutputDestinations = destinations;
 			coreConfiguration.CaptureDelay = (int)numericUpDownWaitTime.Value;
 			coreConfiguration.DWMBackgroundColor = colorButton_window_background.SelectedColor;
-			coreConfiguration.UpdateCheckInterval = (int)numericUpDown_daysbetweencheck.Value;
 
 			coreConfiguration.IconSize = new Size((int)numericUpdownIconSize.Value, (int)numericUpdownIconSize.Value);
 
@@ -590,47 +473,6 @@ namespace Greenshot {
 			colorButton_window_background.Visible = false;
 		}
 
-		/// <summary>
-		/// Check the destination settings
-		/// </summary>
-		private void CheckDestinationSettings() {
-			bool clipboardDestinationChecked = false;
-			bool pickerSelected = checkbox_picker.Checked;
-			bool destinationsEnabled = true;
-			if (coreConfiguration.Values.ContainsKey("Destinations")) {
-				destinationsEnabled = !coreConfiguration.Values["Destinations"].IsFixed;
-			}
-			listview_destinations.Enabled = destinationsEnabled;
-
-			foreach(int index in listview_destinations.CheckedIndices) {
-				ListViewItem item = listview_destinations.Items[index];
-				if (item.Tag is IDestination destinationFromTag && destinationFromTag.Designation.Equals(ClipboardDestination.DESIGNATION)) {
-					clipboardDestinationChecked = true;
-					break;
-				}
-			}
-
-			if (pickerSelected) {
-				listview_destinations.Enabled = false;
-				foreach(int index in listview_destinations.CheckedIndices) {
-					ListViewItem item = listview_destinations.Items[index];
-					item.Checked = false;
-				}
-			} else {
-				// Prevent multiple clipboard settings at once, see bug #3435056
-				if (clipboardDestinationChecked) {
-					checkbox_copypathtoclipboard.Checked = false;
-					checkbox_copypathtoclipboard.Enabled = false;
-				} else {
-					checkbox_copypathtoclipboard.Enabled = true;
-				}
-			}
-		}
-
-		private void DestinationsCheckStateChanged(object sender, EventArgs e) {
-			CheckDestinationSettings();
-		}
-
 		protected override void OnFieldsFilled() {
 			// the color radio button is not actually bound to a setting, but checked when monochrome/grayscale are not checked
 			if(!radioBtnGrayScale.Checked && !radioBtnMonochrome.Checked) {
@@ -650,7 +492,6 @@ namespace Greenshot {
 			textbox_footerpattern.Enabled = state;
 			textbox_counter.Enabled = state;
 			checkbox_suppresssavedialogatclose.Enabled = state;
-			checkbox_checkunstableupdates.Enabled = state;
 			checkbox_minimizememoryfootprint.Enabled = state;
 			checkbox_reuseeditor.Enabled = state;
 		}

@@ -83,7 +83,6 @@ namespace Greenshot.Destinations {
 
 		public override ExportInformation ExportCapture(bool manuallyInitiated, ISurface surface, ICaptureDetails captureDetails) {
 			ExportInformation exportInformation = new ExportInformation(Designation, Description);
-			MapiMailMessage.SendImage(surface, captureDetails);
 			exportInformation.ExportMade = true;
 			ProcessExport(exportInformation, surface);
 			return exportInformation;

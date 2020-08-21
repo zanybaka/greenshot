@@ -531,13 +531,6 @@ namespace Greenshot {
 			DestinationHelper.ExportCapture(true, ClipboardDestination.DESIGNATION, _surface, _surface.CaptureDetails);
 		}
 
-		private void BtnPrintClick(object sender, EventArgs e) {
-			// The BeginInvoke is a solution for the printdialog not having focus
-			BeginInvoke((MethodInvoker) delegate {
-				DestinationHelper.ExportCapture(true, PrinterDestination.DESIGNATION, _surface, _surface.CaptureDetails);
-			});
-		}
-
 		private void CloseToolStripMenuItemClick(object sender, EventArgs e) {
 			Close();
 		}
@@ -726,12 +719,6 @@ namespace Greenshot {
 			HelpFileLoader.LoadHelp();
 		}
 
-		private void AboutToolStripMenuItemClick(object sender, EventArgs e)
-        {
-            var mainForm = SimpleServiceProvider.Current.GetInstance<MainForm>();
-            mainForm.ShowAbout();
-		}
-
 		private void PreferencesToolStripMenuItemClick(object sender, EventArgs e) {
             var mainForm = SimpleServiceProvider.Current.GetInstance<MainForm>();
             mainForm.ShowSetting();
@@ -845,9 +832,6 @@ namespace Greenshot {
 						break;
 					case Keys.B:	// Border Ctrl + B
 						AddBorderToolStripMenuItemClick(sender, e);
-						break;
-					case Keys.T:	// Torn edge Ctrl + T
-						TornEdgesToolStripMenuItemMouseUp(sender, new MouseEventArgs(MouseButtons.Left, 0, 0, 0, 0));
 						break;
 					case Keys.I:	// Invert Ctrl + I
 						InvertToolStripMenuItemClick(sender, e);
@@ -1103,8 +1087,6 @@ namespace Greenshot {
 					ToolStripItemEndisabler.Disable(destinationsToolStrip);
 					ToolStripItemEndisabler.Disable(toolsToolStrip);
 					ToolStripItemEndisabler.Enable(closeToolStripMenuItem);
-					ToolStripItemEndisabler.Enable(helpToolStripMenuItem);
-					ToolStripItemEndisabler.Enable(aboutToolStripMenuItem);
 					ToolStripItemEndisabler.Enable(preferencesToolStripMenuItem);
 					_controlsDisabledDueToConfirmable = true;
 				}
@@ -1405,35 +1387,6 @@ namespace Greenshot {
 			var result = new ResizeSettingsForm(resizeEffect).ShowDialog(this);
 			if (result == DialogResult.OK) {
 				_surface.ApplyBitmapEffect(resizeEffect);
-				UpdateUndoRedoSurfaceDependencies();
-			}
-		}
-
-		/// <summary>
-		/// This is used when the torn-edge button is used
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e">MouseEventArgs</param>
-		private void TornEdgesToolStripMenuItemMouseUp(object sender, MouseEventArgs e)
-		{
-			var tornEdgeEffect = EditorConfiguration.TornEdgeEffectSettings;
-			bool apply;
-			switch (e.Button)
-			{
-				case MouseButtons.Left:
-					apply = true;
-					break;
-				case MouseButtons.Right:
-					var result = new TornEdgeSettingsForm(tornEdgeEffect).ShowDialog(this);
-					apply = result == DialogResult.OK;
-					break;
-				default:
-					return;
-			}
-
-			if (apply)
-			{
-				_surface.ApplyBitmapEffect(tornEdgeEffect);
 				UpdateUndoRedoSurfaceDependencies();
 			}
 		}

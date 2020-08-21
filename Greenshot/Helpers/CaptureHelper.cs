@@ -31,13 +31,11 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
-using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 using GreenshotPlugin.IniFile;
 using GreenshotPlugin.Interfaces;
-using GreenshotPlugin.UnmanagedHelpers.Enums;
 
 namespace Greenshot.Helpers {
 	/// <summary>
@@ -51,7 +49,7 @@ namespace Greenshot.Helpers {
 		private List<WindowDetails> _windows = new List<WindowDetails>();
 		private WindowDetails _selectedCaptureWindow;
 		private Rectangle _captureRect = Rectangle.Empty;
-		private readonly bool _captureMouseCursor;
+		private readonly bool _captureMouseCursor = false;
 		private ICapture _capture;
 		private CaptureMode _captureMode;
 		private ScreenCaptureMode _screenCaptureMode = ScreenCaptureMode.Auto;
@@ -116,15 +114,6 @@ namespace Greenshot.Helpers {
 		public static void CaptureLastRegion(bool captureMouse)
         {
             using CaptureHelper captureHelper = new CaptureHelper(CaptureMode.LastRegion, captureMouse);
-            captureHelper.MakeCapture();
-        }
-
-		public static void CaptureIe(bool captureMouse, WindowDetails windowToCapture)
-        {
-            using CaptureHelper captureHelper = new CaptureHelper(CaptureMode.IE, captureMouse)
-            {
-                SelectedCaptureWindow = windowToCapture
-            };
             captureHelper.MakeCapture();
         }
 
@@ -203,9 +192,6 @@ namespace Greenshot.Helpers {
 		}
 
 		private void DoCaptureFeedback() {
-			if (CoreConfig.PlayCameraSound) {
-				SoundHelper.Play();
-			}
 		}
 
 		/// <summary>
@@ -274,7 +260,7 @@ namespace Greenshot.Helpers {
 			if (_captureMode != CaptureMode.File && _captureMode != CaptureMode.Clipboard)
 			{
 				_capture = WindowCapture.CaptureCursor(_capture);
-				_capture.CursorVisible = _captureMouseCursor && CoreConfig.CaptureMousepointer;
+				_capture.CursorVisible = _captureMouseCursor;
 			}
 
 			switch(_captureMode) {
@@ -297,13 +283,6 @@ namespace Greenshot.Helpers {
 					}
 					SetDpi();
 					HandleCapture();
-					break;
-				case CaptureMode.IE:
-					if (IeCaptureHelper.CaptureIe(_capture, SelectedCaptureWindow) != null) {
-						_capture.CaptureDetails.AddMetaData("source", "Internet Explorer");
-						SetDpi();
-						HandleCapture();
-					}
 					break;
 				case CaptureMode.FullScreen:
 					// Check how we need to capture the screen
@@ -633,11 +612,6 @@ namespace Greenshot.Helpers {
 				Modified = !outputMade
 			};
 
-			// Register notify events if this is wanted
-			if (CoreConfig.ShowTrayNotification && !CoreConfig.HideTrayicon) {
-				surface.SurfaceMessage += SurfaceMessageReceived;
-
-			}
 			// Let the processors do their job
 			foreach(var processor in SimpleServiceProvider.Current.GetAllInstances<IProcessor>()) {
                 if (!processor.isActive) continue;
@@ -789,17 +763,6 @@ namespace Greenshot.Helpers {
 				// 2) Is Windows >= Vista & DWM enabled: use DWM
 				// 3) Otherwise use GDI (Screen might be also okay but might lose content)
 				if (isAutoMode) {
-					if (CoreConfig.IECapture && IeCaptureHelper.IsIeWindow(windowToCapture)) {
-						try {
-							ICapture ieCapture = IeCaptureHelper.CaptureIe(captureForWindow, windowToCapture);
-							if (ieCapture != null) {
-								return ieCapture;
-							}
-						} catch (Exception ex) {
-							Log.WarnFormat("Problem capturing IE, skipping to normal capture. Exception message was: {0}", ex.Message);
-						}
-					}
-
 					// Take default screen
 					windowCaptureMode = WindowCaptureMode.Screen;
 
